@@ -10,4 +10,6 @@ class Image extends Model
         'url',
     ];
 
+
+
 }

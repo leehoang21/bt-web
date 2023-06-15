@@ -14,7 +14,7 @@ class OderRequest extends BaseRequest
     public function rules()
     {
 
-        $status = 'required,status';
+        $status = 'required:status';
         return [
             'status' => $status,
         ];

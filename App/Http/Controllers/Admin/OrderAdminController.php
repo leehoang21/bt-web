@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OderRequest;
+use App\Main\Config\AppConst;
 use App\Main\Services\OrderService;
-use AppConst;
 use Illuminate\Http\Request;
 
 class OrderAdminController extends Controller
@@ -26,7 +26,9 @@ class OrderAdminController extends Controller
         $data = [
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
-            'name' => $request->name,
+            'start' => $request->start,
+            'end' => $request->end,
+            'order_by' => $request->order_by,
         ];
         return $this->service->getAll($data);
     }
