@@ -86,6 +86,14 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->where($attribute, "=", $value)->first($columns);
     }
 
+    public function findOneLast($attribute, $value, array $columns = ['*'])
+    {
+        //reset model
+        $this->getModel();
+
+        return $this->model->where($attribute, "=", $value)->orderBy('id', 'desc')->first($columns);
+    }
+
     public function insert(array $data)
     {
         //reset model

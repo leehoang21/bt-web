@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminLoginRequest;
 use App\Main\Services\AuthService;
 use Illuminate\Http\Request;
 
@@ -26,6 +25,21 @@ class AuthAdminController extends Controller
 
         return $this->authService->login($userName, $password);
     }
+
+    public function sendVerify(Request $request)
+    {
+        $email = $request->email;
+        return $this->authService->sendOtp($email);
+    }
+
+    public function verify(Request $request)
+    {
+        $email = $request->email;
+        $otp = $request->otp;
+        return $this->authService->verify($email, $otp);
+    }
+
+
 
 
 }

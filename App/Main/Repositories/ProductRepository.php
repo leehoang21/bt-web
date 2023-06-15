@@ -5,7 +5,6 @@ namespace App\Main\Repositories;
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\ProductDTO;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 
 class ProductRepository extends BaseRepository
 {
@@ -19,22 +18,27 @@ class ProductRepository extends BaseRepository
         $query = Product::query();
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
+
+        //search
         if (!empty($params['name']) && is_string($params['name'])) {
             $stringLike = '%' . $params['name'] . '%';
             $query->where('name', 'like', $stringLike);
 
         }
+
+
+        //pagination
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
         }
-        $query->get();
         $products = $query->with([
             'category:id,name,slug',
             'images:id,url',
             'orders:id',
             'tags:id,name',
+
         ])
             ->orderBy($orderBy)
             ->get();
@@ -55,8 +59,9 @@ class ProductRepository extends BaseRepository
             ->with([
                 'category:id,name,slug',
                 'images:id,url',
-                'orders:id',
+                'orders:id,status',
                 'tags:id,name',
+
             ])
             ->find($id);
         if ($product) {
