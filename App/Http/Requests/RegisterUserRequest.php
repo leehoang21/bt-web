@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 use Illuminate\Support\Str;
 
-class UserFormRequest extends BaseRequest
+class RegisterUserRequest extends BaseRequest
 {
 
     /**
@@ -13,11 +13,10 @@ class UserFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $pass = $this->method() == 'POST' ? 'required|min:6' : 'nullable|min:6';
         return [
             'name'=> 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => $pass,
+            'password' => 'required|min:6',
             'phone' => 'nullable',
 
         ];

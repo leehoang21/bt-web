@@ -1,16 +1,24 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthAdminController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-require __DIR__.'/api-admin.php';
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/upload_image', [ImageController::class, 'store']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/auth/send_verify', [AuthController::class,'sendVerify']);
+    Route::post('/auth/change_password', [AuthController::class,'changePass']);
+    Route::post('/auth/verify_email', [AuthController::class,'verifyEmail']);
+    Route::post('/update_avatar', [ImageController::class,'updateAvatar']);
+    Route::get('/profile', [UserController::class,'show']);
+    Route::post('/profile', [UserController::class,'store']);
+    Route::get('/category', [CategoryController::class,'index']);
+    Route::get('/product/{slug}', [ProductController::class,'show']);
+    Route::get('/product', [ProductController::class,'index']);
+});
+require __DIR__ . '/api-admin.php';

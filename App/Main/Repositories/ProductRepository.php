@@ -53,23 +53,49 @@ class ProductRepository extends BaseRepository
         ];
     }
 
-    public function getProductById($id)
+    public function getProductBySlugCategory($slug,$params)
     {
-        $product = Product::query()
-            ->with([
-                'category:id,name,slug',
+        $select = "products.id,products.name,products.description,products.short_description,products.price,categories.slug as category_slug,
+        categories.name as category_name,
+        categories.id as category_id
+        ";
+        $query = Product::query()
+            ->join('categories', 'products.id_category', '=', 'categories.id')
+            ->selectRaw($select
+            )->with([
+
                 'images:id,url',
-                'orders:id,status',
+                'orders:id',
                 'tags:id,name',
 
-            ])
-            ->find($id);
-        if ($product) {
-            $data = new ProductDTO($product);
-            return $data->formatDataDetailProduct();
-        }
+            ]);
+        $page = $params['page'] ?? null;
+        $limit = $params['limit'] ?? null;
+        //search
+        if (!empty($params['name']) && is_string($params['name'])) {
+            $stringLike = '%' . $params['name'] . '%';
+            $query->where('name', 'like', $stringLike);
 
-        return $product;
+        }
+        //pagination
+        $total = $query->count();
+        if (!empty($limit) && !empty($page)) {
+            $offset = ($page - 1) * $limit;
+
+            $query->limit($limit)->offset($offset);
+        }
+        $stringLikeSlug = '%' . $slug. '%';
+        $products = $query
+            ->where('categories.slug','like', $stringLikeSlug)
+            ->get();
+        $products->map(function ($item) {
+            $dto = new ProductDTO($item);
+            return $dto->formatData();
+        });
+        return [
+            'products' => $products,
+            'total' => $total,
+        ];
 
     }
 
