@@ -32,9 +32,13 @@ class AuthService
         return response(
             [
                 'status' => Response::RESPONSE_STATUS_SUCCESS,
-                'data' => $user,
-                'access_token' => $token,
-                'token_type' => 'Bearer'
+                'data' => [
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user'=>$user,
+
+                ],
+
             ]
             , Response::HTTP_CODE_SUCCESS);
     }
