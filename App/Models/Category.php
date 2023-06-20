@@ -11,11 +11,17 @@ class Category extends Model
     protected $fillable = [
         'name',
         'slug',
+        'color',
     ];
 
     public function products()
     {
         return $this->hasMany(Product::class, 'id_category');
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany(Image::class, 'image_categories', 'id_category', 'id_image');
     }
 
 

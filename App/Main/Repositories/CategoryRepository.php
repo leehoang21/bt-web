@@ -31,6 +31,11 @@ class CategoryRepository extends BaseRepository
         }
         $query->get();
         $data = $query
+            ->with(
+                [
+                    'images:id,url',
+                ]
+            )
             ->orderBy($orderBy)
 
             ->get();

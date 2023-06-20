@@ -99,6 +99,12 @@ class ProductRepository extends BaseRepository
 
     }
 
+    public  function  getProductBySlug($slug){
+        $product = $this->findOne('slug',$slug);
+        $dto = new ProductDTO($product);
+        return $dto->formatData();
+    }
+
     public function has(string $name)
     {
         $this->has($name);

@@ -10,7 +10,7 @@ use App\Main\Services\SettingService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class SettingController extends Controller
+class SettingAdminController extends Controller
 {
     protected $service;
 

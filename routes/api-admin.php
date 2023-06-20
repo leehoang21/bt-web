@@ -17,7 +17,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/post', PostAdminController::class);
         Route::get('/detail_post/{slug}', [PostAdminController::class,'showBySlug']);
         Route::apiResource('/advisory', \App\Http\Controllers\Admin\AdvisoryController::class);
-        Route::apiResource('/setting', \App\Http\Controllers\Admin\SettingController::class);
+        Route::apiResource('/setting', \App\Http\Controllers\Admin\SettingAdminController::class);
         Route::apiResource('/category', \App\Http\Controllers\Admin\CategoryAdminController::class);
         Route::apiResource('/image', \App\Http\Controllers\Admin\ImageAdminController::class);
         Route::apiResource('/user', \App\Http\Controllers\Admin\UserAdminController::class);

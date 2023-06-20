@@ -38,7 +38,9 @@ class CategoryAdminController extends Controller
         $data = [
             'data' =>
                 [
-                    'name' => $request['name'], 'slug' => $request['slug'],
+                    'name' => $request['name'],
+                    'slug' => $request['slug'],
+                    'color' => $request['color'],
 
                 ],
 
@@ -66,6 +68,7 @@ class CategoryAdminController extends Controller
                 [
                     'name' => $request['name'],
                     'slug' => $request['slug'],
+                    'color' => $request['color'],
 
                 ],
         ];
