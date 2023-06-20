@@ -13,7 +13,7 @@ class ProductFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $slug = 'required|unique:products,slug';
+        $slug = $this->method() == 'POST' ? 'required|unique:products,slug' : 'required';
         if($this->isMethod('put')){
             $id = $this->product;
             $slug .= ','.$id.',id';
@@ -24,7 +24,9 @@ class ProductFormRequest extends BaseRequest
             'description' => 'required|string',
             'short_description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id|nullable',
+            'id_category' => 'required|exists:categories,id|nullable',
+            'images' => 'array',
+            'tags' => 'array',
         ];
     }
 

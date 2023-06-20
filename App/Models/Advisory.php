@@ -9,11 +9,14 @@ class Advisory extends Model
 {
     use HasFactory;
 
+    protected  $table = 'advisories';
+
     protected $fillable = [
         'phone',
         'name',
         'status',
         'email',
+        'content',
     ];
 
 }

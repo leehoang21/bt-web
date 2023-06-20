@@ -17,6 +17,7 @@ class ProductService
     public function __construct(
         ProductRepository $repository,
 
+
     )
     {
         $this->repository = $repository;
@@ -54,7 +55,6 @@ class ProductService
             error_log($e->getMessage());
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
-
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 

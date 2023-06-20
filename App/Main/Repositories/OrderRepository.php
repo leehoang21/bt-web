@@ -5,10 +5,8 @@ namespace App\Main\Repositories;
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\OrderDTO;
 use App\Main\DTO\ProductDTO;
-use App\Models\Advisory;
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends BaseRepository
 {
@@ -17,34 +15,67 @@ class OrderRepository extends BaseRepository
         return Order::class;
     }
 
-    public function getAll(array $params = [], $orderBy = 'status')
+    public function getAll(array $params = [])
     {
         $query = Order::query();
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
+
+        //statistic
+        $start = $params['start'] ?? null;
+        $end = $params['end'] ?? null;
         $status = $params['status'] ?? null;
-        if (!empty($status) ) {
-            $query->where('status', $status);
+        if (!empty($start) && !empty($end)) {
+
+            if ($status != null) {
+                error_log($status);
+                $query->where('status', $status);
+            }
+            $query->whereBetween('updated_at', [$start, $end]);
         }
-        $total = $query->count();
+        //pagination
+
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
         }
-        $query->get();
+        //order by
+        $order = [
+            'total'=> 'SUM(order_details.quantity) ',
+            'total_price'=> 'SUM(order_details.price*order_details.quantity) ',
+            'status'=>'orders.status ',
+        ];
+        $orderBy = $params['order_by'] ?? null;
+        if (!empty($orderBy)) {
+            $orderBy = json_decode($orderBy, true);
+            $order = $order[$orderBy[0]];
+            $orderBy = $order. $orderBy[1];
+
+        }else{
+            $orderBy = 'orders.id';
+        }
+        //select
+        $select = "orders.id,orders.id_user,orders.status
+        ,SUM(order_details.quantity) as total,
+        SUM(order_details.price*order_details.quantity) as total_price
+        ";
+
         $order = $query->with([
             'orderDetails:quantity,price,id_order',
             'user:id,name,email,phone',
             'products:id,name,price,slug',
-
-        ])
-            ->orderBy($orderBy)
+        ])->selectRaw(
+            $select
+        )->join('order_details', 'orders.id', '=', 'order_details.id_order')
+            ->groupByRaw('orders.id,orders.id_user,orders.status')
+            ->orderByRaw($orderBy)
             ->get();
-
         $order->map(function ($item) {
             $dto = new OrderDTO($item);
+
             return $dto->formatData();
         });
+        $total = $order->count();
         return [
             'orders' => $order,
             'total' => $total,

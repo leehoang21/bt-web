@@ -19,4 +19,9 @@ class Post extends Model
         return $this->belongsToMany(Image::class, 'image_posts', 'id_post', 'id_image');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_posts', 'id_post', 'id_tag');
+    }
+
 }

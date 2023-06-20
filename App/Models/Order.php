@@ -30,11 +30,23 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'id_order');
     }
 
+    public function totalPrice()
+    {
+        $total = 0;
+        $orderDetails = $this->orderDetails()->where('id_order', $this->id)->get();
+
+        foreach ($orderDetails as $orderDetail) {
+            $total += $orderDetail->total();
+        }
+        return $total;
+    }
+
     public function total()
     {
         $total = 0;
-        foreach ($this->orderDetails as $orderDetail) {
-            $total += $orderDetail->total();
+        $orderDetails = $this->orderDetails()->where('id_order', $this->id)->get();
+        foreach ($orderDetails as $orderDetail) {
+            $total += $orderDetail->quantity;
         }
         return $total;
     }
