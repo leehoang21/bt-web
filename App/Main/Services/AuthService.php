@@ -5,6 +5,7 @@ namespace App\Main\Services;
 use App\Main\Helpers\Response;
 use App\Main\Repositories\AdminRepository;
 use App\Main\Repositories\OtpRepository;
+use App\Main\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -12,14 +13,17 @@ class AuthService
 {
     protected AdminRepository $adminRepository;
     protected OtpRepository $otpRepository;
+    protected  UserRepository $userRepository;
 
     public function __construct(
         AdminRepository $adminRepository,
         OtpRepository   $otpRepository,
+        UserRepository $userRepository
     )
     {
         $this->adminRepository = $adminRepository;
         $this->otpRepository = $otpRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function login($userName, $password)
@@ -49,6 +53,35 @@ class AuthService
             ]
             , Response::HTTP_CODE_SUCCESS);
     }
+
+    public function loginUser($email, $password)
+    {
+
+        $user = $this->userRepository->findOne('email', $email);
+
+        if (empty($user)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+        if (!Hash::check($password, $user->password)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response(
+            [
+                'status' => Response::RESPONSE_STATUS_SUCCESS,
+                'data' => [
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user'=>$user,
+
+                ],
+
+            ]
+            , Response::HTTP_CODE_SUCCESS);
+    }
+
 
     public function sendOtp($email)
     {
@@ -87,7 +120,29 @@ class AuthService
         }
         $otp->is_used = true;
         $otp->save();
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify success', Response::HTTP_CODE_SUCCESS);
+        return '';
+    }
+
+    public function verifyEmail($email)
+    {
+        $user = $this->userRepository->findOne('email', $email);
+        if (empty($user)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+        $user->status = 1;
+        $user->save();
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success', Response::HTTP_CODE_SUCCESS);
+    }
+
+    public function changePass($email,$pass)
+    {
+        $user = $this->userRepository->findOne('email', $email);
+        if (empty($user)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+        $user->password = Hash::make($pass);
+        $user->save();
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Change password success', Response::HTTP_CODE_SUCCESS);
     }
 
 

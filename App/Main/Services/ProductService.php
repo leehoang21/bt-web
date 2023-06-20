@@ -33,13 +33,16 @@ class ProductService
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['products'], $paginate);
     }
 
-    public function getProductById($id) {
-        $product = $this->repository->getProductById($id);
-        if($product){
-            return (new \App\Main\Helpers\Response)->responseJsonSuccess($product);
-        }
-        return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+    public function getProductBySlugCategory($slug,$data) {
+        $products = $this->repository->getProductBySlugCategory($slug,$data);
+        $total = $products['total'];
+        $limit = $data['limit'];
+        $page = $data['page'];
+        $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['products'], $paginate);
     }
+
+
 
     public function save($data) {
         DB::beginTransaction();
