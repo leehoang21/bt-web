@@ -41,33 +41,35 @@ class OrderRepository extends BaseRepository
         }
         //order by
         $order = [
-            'total'=> 'SUM(order_details.quantity) ',
-            'total_price'=> 'SUM(order_details.price*order_details.quantity) ',
-            'status'=>'orders.status ',
+            'total' => 'SUM(order_details.quantity) ',
+            'total_price' => 'SUM(products.price*order_details.quantity) ',
+            'status' => 'orders.status ',
         ];
-        $orderBy = $params['order_by'] ?? null;
-        if (!empty($orderBy)) {
-            $orderBy = json_decode($orderBy, true);
-            $order = $order[$orderBy[0]];
-            $orderBy = $order. $orderBy[1];
 
-        }else{
+        $orderBy = $params['order_by'] ?? null;
+
+        if (!empty($orderBy)) {
+            $orderBy = explode(',', $orderBy);
+            $order = $order[$orderBy[0]];
+            $orderBy = $order . $orderBy[1];
+
+        } else {
             $orderBy = 'orders.id';
         }
         //select
-        $select = "orders.id,orders.id_user,orders.status
-        ,SUM(order_details.quantity) as total,
-        SUM(order_details.price*order_details.quantity) as total_price
-        ";
+        $select = "orders.id,orders.id_user,orders.status,SUM(order_details.quantity) as total,SUM(products.price*order_details.quantity) as total_price  ";
 
         $order = $query->with([
-            'orderDetails:quantity,price,id_order',
+
             'user:id,name,email,phone',
-            'products:id,name,price,slug',
+            'products:id,name,price',
+            'orderDetails:id_order,id_product,quantity'
+
         ])->selectRaw(
             $select
         )->join('order_details', 'orders.id', '=', 'order_details.id_order')
-            ->groupByRaw('orders.id,orders.id_user,orders.status')
+            ->join('products', 'products.id', '=', 'order_details.id_product')
+            ->groupByRaw('orders.id_user,orders.status,orders.id')
             ->orderByRaw($orderBy)
             ->get();
         $order->map(function ($item) {

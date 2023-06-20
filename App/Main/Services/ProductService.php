@@ -33,6 +33,10 @@ class ProductService
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['products'], $paginate);
     }
 
+    public function getBySlug($slug) {
+        return $this->repository->getProductBySlug($slug);
+    }
+
     public function getProductBySlugCategory($slug,$data) {
         $products = $this->repository->getProductBySlugCategory($slug,$data);
         $total = $products['total'];

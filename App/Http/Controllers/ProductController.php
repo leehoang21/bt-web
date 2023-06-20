@@ -40,7 +40,12 @@ class ProductController extends Controller
         ];
         return $this->productService->getAllProducts($data);
     }
-    public function show($slug, Request $request)
+    public function show($slug)
+    {
+        return $this->productService->getBySlug($slug);
+    }
+
+    public function getByCategory($slug, Request $request)
     {
         $page = (int)$request->page;
         $data = [

@@ -14,11 +14,6 @@ class OrderDetail extends Model
         'id_order',
         'id_product',
         'quantity',
-        'price',
-    ];
-
-    protected $casts = [
-       'price' => 'float',
     ];
 
     public function order()
@@ -30,11 +25,5 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class, 'id_product');
     }
-
-    public function total()
-    {
-        return $this->quantity * $this->price;
-    }
-
 
 }

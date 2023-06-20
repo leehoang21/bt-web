@@ -40,7 +40,6 @@ class CategoryService
     public function save($data) {
         DB::beginTransaction();
         try{
-
             if(empty($data['id'])) {
                 $result = $this->createData($data);
             } else {
