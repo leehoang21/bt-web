@@ -20,6 +20,10 @@ class UserService
 
     }
 
+    public  function  getEmail(){
+        return $this->repository->getEmail();
+    }
+
     public function getAll($data)
     {
         $result = $this->repository->getAll($data);

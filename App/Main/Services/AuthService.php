@@ -134,17 +134,19 @@ class AuthService
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success', Response::HTTP_CODE_SUCCESS);
     }
 
-    public function changePass($email,$pass)
+    public function changePass($email,$pass,$newPass)
     {
         $user = $this->userRepository->findOne('email', $email);
         if (empty($user)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
         }
-        $user->password = Hash::make($pass);
+        if (!Hash::check($pass, $user->password)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+        $user->password = Hash::make($newPass);
         $user->save();
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Change password success', Response::HTTP_CODE_SUCCESS);
     }
-
 
     private function generateOtp()
     {

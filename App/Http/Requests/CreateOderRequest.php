@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 use Illuminate\Support\Str;
 
-class ChangePasswordRequest extends BaseRequest
+class CreateOderRequest extends BaseRequest
 {
 
     /**
@@ -14,9 +14,8 @@ class ChangePasswordRequest extends BaseRequest
     public function rules()
     {
         return [
-            'password' => 'required|min:6',
-            'new_password' => 'required|min:6',
-
+            'id_product' => 'required',
+            'total' => 'required',
         ];
     }
 
@@ -31,7 +30,7 @@ class ChangePasswordRequest extends BaseRequest
     {
         $this->merge([
 
-            'slug' => Str::slug($this->slug),
+
 
         ]);
     }

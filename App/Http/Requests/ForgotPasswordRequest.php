@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 use Illuminate\Support\Str;
 
-class ChangePasswordRequest extends BaseRequest
+class ForgotPasswordRequest extends BaseRequest
 {
 
     /**
@@ -15,8 +15,7 @@ class ChangePasswordRequest extends BaseRequest
     {
         return [
             'password' => 'required|min:6',
-            'new_password' => 'required|min:6',
-
+            'otp' => 'required',
         ];
     }
 

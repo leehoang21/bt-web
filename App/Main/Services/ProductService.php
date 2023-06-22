@@ -24,8 +24,8 @@ class ProductService
 
     }
 
-    public function getAllProducts( $data) {
-        $products = $this->repository->getAllProducts($data);
+    public function getAllProducts( $data,$orderBy) {
+        $products = $this->repository->getAllProducts($data,$orderBy);
         $total = $products['total'];
         $limit = $data['limit'];
         $page = $data['page'];
