@@ -47,6 +47,13 @@ class UserRepository extends BaseRepository
         return $data;
     }
 
+    public function getEmail(){
+        $data = User::query()
+        ->select('email')
+        ->get();
+        return $data;
+    }
+
     public function create($data = [])
     {
         return parent::create($data);

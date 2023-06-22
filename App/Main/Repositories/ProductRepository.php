@@ -33,14 +33,29 @@ class ProductRepository extends BaseRepository
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
         }
-        $products = $query->with([
+
+        //order by
+        $order = [
+            'new' => 'id desc',
+            'hot' => 'SUM(order_details.quantity)  desc',
+        ];
+
+        $orderBy = $order[$orderBy] ?? $orderBy;
+
+        $select = "products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,SUM(order_details.quantity) as total";
+        $products = $query
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
+            ->selectRaw($select)
+            ->groupByRaw('products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category')
+
+            ->with([
             'category:id,name,slug',
             'images:id,url',
             'orders:id',
             'tags:id,name',
 
         ])
-            ->orderBy($orderBy)
+            ->orderByRaw($orderBy)
             ->get();
 
         $products->map(function ($item) {

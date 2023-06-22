@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\SendVerifyRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Main\Services\AuthService;
 use App\Main\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -35,12 +37,13 @@ class AuthController extends Controller
 
     public function register(RegisterUserRequest $request)
     {
+        $pass = Hash::make($request['password']);
         $data = [
             'data' =>
                 [
                     'name' => $request['name'],
                     'email' => $request['email'],
-                    'password' => $request['password'],
+                    'password' => $pass,
                     'phone' => $request['phone'],
                 ],
 
@@ -71,15 +74,22 @@ class AuthController extends Controller
         }
     }
 
-    public function changePass(ChangePasswordRequest $request)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
         $error = $this->verify($request);
+        $email = auth()->user()->email;
         if (empty($error)) {
-            return $this->authService->changePass($request->email, $request->password);
+            return $this->authService->changePass($email, $request->password);
         } else {
             return $error;
         }
     }
 
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $email = auth()->user()->email;
+        $newPassword = $request['new_password'];
+        return $this->authService->changePass($email, $request->password, $newPassword);
+    }
 
 }
