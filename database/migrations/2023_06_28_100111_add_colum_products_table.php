@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-//        Schema::table('products', function (Blueprint $table) {
-//            $table -> integer('total') ->nullable();
-//            $table -> string('serial_number') ->nullable();
-//            $table -> integer('warranty_period') ->nullable();
-//        });
+        Schema::table('products', function (Blueprint $table) {
+            $table -> integer('total') ->nullable();
+            $table -> string('serial_number') ->nullable();
+            $table -> integer('warranty_period') ->nullable();
+        });
 
     }
 
