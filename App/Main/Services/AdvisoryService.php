@@ -2,6 +2,7 @@
 
 namespace App\Main\Services;
 
+use App\Main\Helpers\Response;
 use App\Main\Repositories\AdvisoryRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -33,7 +34,7 @@ class AdvisoryService
         if($data){
             return (new \App\Main\Helpers\Response)->responseJsonSuccess($data);
         }
-        return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+        return (new \App\Main\Helpers\Response)->responseJsonFail(false, );
     }
 
 
@@ -79,6 +80,6 @@ class AdvisoryService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess('',message: true);
     }
 }

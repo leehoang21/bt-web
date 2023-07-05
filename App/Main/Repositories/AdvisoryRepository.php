@@ -46,11 +46,12 @@ class AdvisoryRepository extends BaseRepository
         ];
     }
 
-    public function getById($id): \App\Models\Advisory
+    public function getById($id)
     {
         $post = Advisory::query()
 
             ->find($id);
+
         $dto = new AdvisoryDTO($post);
         return $dto->formatData();
     }

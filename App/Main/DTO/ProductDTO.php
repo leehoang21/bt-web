@@ -6,7 +6,7 @@ use App\Models\Product;
 
 class ProductDTO
 {
-    protected Product $product;
+    protected ?Product $product;
     public function __construct($product)
     {
         $this->product = $product;

@@ -2,6 +2,7 @@
 
 namespace App\Main\Services;
 
+use App\Main\Helpers\Response;
 use App\Main\Repositories\PostRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,9 @@ class PostService
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
+            if ($e->getCode() == 23000) {
+                return (new Response)->responseJsonFail(message: 'The slug has already been taken.',httpCode: Response::HTTP_CODE_UNAUTHORIZED);
+            }
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 

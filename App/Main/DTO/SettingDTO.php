@@ -5,7 +5,7 @@ use App\Models\Setting;
 
 class SettingDTO
 {
-    protected Setting $dto;
+    protected ?Setting $dto;
     public function __construct($dto)
     {
         $this->dto = $dto;

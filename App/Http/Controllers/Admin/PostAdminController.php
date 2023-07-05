@@ -82,12 +82,7 @@ class PostAdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        return $this->service->getById($id);
-    }
-
-    public function showBySlug($slug)
+    public function show($slug)
     {
         return $this->service->getBySlug($slug);
     }
@@ -113,23 +108,24 @@ class PostAdminController extends Controller
             $res = $this->postService->updateData($id, $tags);
             if ($re->status() != Response::HTTP_CODE_SUCCESS)
                 return $re;
-            else if($res->status() != Response::HTTP_CODE_SUCCESS)
+            else if ($res->status() != Response::HTTP_CODE_SUCCESS)
                 return $res;
             else
-                return $result;
+                return (new \App\Main\Helpers\Response)->responseJsonSuccess(null, message: true,
+                );
         }
-        return (new \App\Main\Helpers\Response)->responseJsonFail(
-            [
-                'message' => 'Update post fail',
-
-            ],
-            Response::RESPONSE_STATUS_FAIL,
-        );
+        return $result;
     }
 
     public function destroy($id)
     {
-        return $this->service->delete($id);
+        $result = $this->service->delete($id);
+        if ($result->status() == Response::HTTP_CODE_SUCCESS) {
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess(null, message: true,
+            );
+        }
+        return $result;
+
     }
 
 

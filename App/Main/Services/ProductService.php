@@ -60,9 +60,12 @@ class ProductService
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
+            if($e->getCode() == 23000) {
+                return (new \App\Main\Helpers\Response)->responseJsonFail( message: 'The slug has already been taken.');
+            }
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(null,message: true);
     }
 
     private function createData($data) {
@@ -88,6 +91,6 @@ class ProductService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result,message: true);
     }
 }

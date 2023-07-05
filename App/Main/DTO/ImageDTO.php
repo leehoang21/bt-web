@@ -3,10 +3,11 @@
 namespace App\Main\DTO;
 
 use App\Models\Category;
+use App\Models\Image;
 
 class ImageDTO
 {
-    protected Category $dto;
+    protected ?Image $dto;
     public function __construct($dto)
     {
         $this->dto = $dto;

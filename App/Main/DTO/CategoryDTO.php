@@ -6,7 +6,7 @@ use App\Models\Category;
 
 class CategoryDTO
 {
-    protected Category $dto;
+    protected ?Category $dto;
     public function __construct($dto)
     {
         $this->dto = $dto;

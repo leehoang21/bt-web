@@ -15,7 +15,12 @@ class Product extends Model
         'description',
         'price',
         'id_category',
+        'status',
+        'total',
+        'serial_number',
+        'warranty_period',
     ];
+
 
     public function category()
     {

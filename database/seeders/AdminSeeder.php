@@ -13,14 +13,14 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-       $data = [
+        $data = [
 
-               'name' => 'Admin',
-               'user_name' => 'admin',
-                'email' => 'hh@gmail.com',
-                'password' => bcrypt('123456'),
-           'remember_token' => '12345456'
-               ];
+            'name' => 'Admin',
+            'user_name' => 'admin',
+            'email' => 'hh@gmail.com',
+            'password' => bcrypt('123456'),
+            'remember_token' => '12345456'
+        ];
         \App\Models\Admin::create($data);
 
     }

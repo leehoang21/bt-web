@@ -6,7 +6,7 @@ use App\Models\Advisory;
 
 class AdvisoryDTO
 {
-    protected Advisory $dto;
+    protected ?Advisory $dto;
     public function __construct($dto)
     {
         $this->dto = $dto;

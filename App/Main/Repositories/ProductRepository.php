@@ -13,16 +13,22 @@ class ProductRepository extends BaseRepository
         return Product::class;
     }
 
-    public function getAllProducts(array $params = [], $orderBy = 'id')
+    public function getAllProducts(array $params = [], $orderBy = 'products.id')
     {
         $query = Product::query();
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
 
         //search
-        if (!empty($params['name']) && is_string($params['name'])) {
-            $stringLike = '%' . $params['name'] . '%';
-            $query->where('name', 'like', $stringLike);
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++) {
+                $searchFields[$i] = 'products.' . $searchFields[$i];
+                $stringLike = '%' . $keyword[$i] . '%';
+                $query->where($searchFields[$i], 'like', $stringLike);
+            }
 
         }
 
@@ -40,13 +46,14 @@ class ProductRepository extends BaseRepository
             'hot' => 'SUM(order_details.quantity)  desc',
         ];
 
-        $orderBy = $order[$orderBy] ?? $orderBy;
+        if($orderBy == 'new' || $orderBy == 'hot')
+            $orderBy = $order[$orderBy];
 
-        $select = "products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,SUM(order_details.quantity) as total";
+        $select = "products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,products.status,SUM(order_details.quantity) as total";
         $products = $query
             ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
             ->selectRaw($select)
-            ->groupByRaw('products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category')
+            ->groupByRaw('products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,products.status')
 
             ->with([
             'category:id,name,slug',
@@ -116,6 +123,8 @@ class ProductRepository extends BaseRepository
 
     public  function  getProductBySlug($slug){
         $product = $this->findOne('slug',$slug);
+        if(empty($product))
+            return null;
         $dto = new ProductDTO($product);
         return $dto->formatData();
     }

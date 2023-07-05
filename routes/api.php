@@ -15,7 +15,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/upload_image', [ImageController::class, 'store']);
 Route::get('/setting', [SettingController::class, 'index']);
 Route::get('/post', [PostController::class, 'index']);
-Route::get('/post/{slug}', [PostController::class, 'showBySlug']);
+Route::get('/post/{slug}', [PostController::class, 'show']);
 Route::post('/auth/send_verify', [AuthController::class,'sendVerify']);
 Route::post('/auth/forgot_password', [AuthController::class,'forgotPassword']);
 Route::get('/category', [CategoryController::class,'index']);
