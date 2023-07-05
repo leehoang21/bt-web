@@ -36,6 +36,8 @@ class ProductController extends Controller
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
             'name' => $request->name,
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
 
         ];
         $orderBy = $request['order_by']??'products.id';
