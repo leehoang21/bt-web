@@ -6,7 +6,7 @@ use App\Models\Order;
 
 class OrderDTO
 {
-    protected Order $order;
+    protected ?Order $order;
     public function __construct($order)
     {
         $this->order = $order;

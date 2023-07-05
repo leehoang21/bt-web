@@ -15,7 +15,7 @@ class ProductAdminController extends Controller
 {
     protected $productService;
     protected ImageProductService $imageProductService;
-    protected  ProductTagService $productTagService;
+    protected ProductTagService $productTagService;
 
     public function __construct(
         ProductService      $productService,
@@ -36,24 +36,29 @@ class ProductAdminController extends Controller
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
             'name' => $request->name,
-
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
         ];
-        return $this->productService->getAllProducts($data);
+        $orderBy = $request['order_by'] ?? 'products.id';
+
+        return $this->productService->getAllProducts($data, $orderBy);
     }
 
     public function store(ProductFormRequest $request)
     {
-
         $data = [
             'product' =>
                 [
-                    'category_id' => $request->category_id,
+
                     'name' => $request->name,
                     'short_description' => $request->short_description,
                     'price' => $request->price,
                     'slug' => $request->slug,
                     'description' => $request->description,
                     'id_category' => $request->id_category,
+                    'total' => $request->total,
+                    'serial_number' => $request->serial_number,
+                    'warranty_period' =>    $request->warranty_period,
                 ],
 
         ];
@@ -67,7 +72,7 @@ class ProductAdminController extends Controller
             $res = $this->productTagService->createData($id, $tags);
             if ($re->status() != Response::HTTP_CODE_SUCCESS)
                 return $re;
-            else if($res->status() != Response::HTTP_CODE_SUCCESS)
+            else if ($res->status() != Response::HTTP_CODE_SUCCESS)
                 return $res;
             else
                 return $result;
@@ -88,9 +93,12 @@ class ProductAdminController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        return $this->productService->getProductById($id);
+        $result =  $this->productService->getBySlug($slug);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(
+            $result
+        );
     }
 
 
@@ -105,6 +113,10 @@ class ProductAdminController extends Controller
                 'slug' => $request->slug,
                 'description' => $request->description,
                 'id_category' => $request->id_category,
+                'total' => $request->total,
+                'serial_number' => $request->serial_number,
+                'warranty_period' =>    $request->warranty_period,
+
             ],
         ];
         $result = $this->productService->save($data);
@@ -116,7 +128,7 @@ class ProductAdminController extends Controller
             $res = $this->productTagService->updateData($id, $tags);
             if ($re->status() != Response::HTTP_CODE_SUCCESS)
                 return $re;
-            else if($res->status() != Response::HTTP_CODE_SUCCESS)
+            else if ($res->status() != Response::HTTP_CODE_SUCCESS)
                 return $res;
             else
                 return $result;

@@ -13,11 +13,8 @@ class TagFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $slug = 'required|unique:products,slug';
-        if($this->isMethod('put')){
-            $id = $this->product;
-            $slug .= ','.$id.',id';
-        }
+        $slug = $this->method() == 'POST' ? 'required|unique:tags,slug' : 'required';
+
         return [
            'slug' => $slug,
             'content' => 'required',

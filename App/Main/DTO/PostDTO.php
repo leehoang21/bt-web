@@ -7,7 +7,7 @@ use App\Models\Post;
 
 class PostDTO
 {
-    protected Post $order;
+    protected ?Post $order;
     public function __construct($order)
     {
         $this->order = $order;

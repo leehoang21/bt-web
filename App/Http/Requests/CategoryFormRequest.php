@@ -13,7 +13,7 @@ class CategoryFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $slug = 'required|unique:categories,slug';
+        $slug = $this->method() == 'POST' ? 'required|string|unique:categories' : 'required|string';
         if($this->isMethod('put')){
             $id = $this->product;
             $slug .= ','.$id.',id';

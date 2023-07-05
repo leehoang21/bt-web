@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SettingFormRequest;
 use App\Main\Config\AppConst;
+use App\Main\Helpers\Response;
 use App\Main\Services\SettingService;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class SettingAdminController extends Controller
 {
@@ -46,13 +46,6 @@ class SettingAdminController extends Controller
 
         return $this->service->save($data);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function show($id)
     {
         return $this->service->getById($id);
@@ -69,17 +62,14 @@ class SettingAdminController extends Controller
                 ],
         ];
 
-        return $this->service->save($data);
+        $result = $this->service->save($data);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess("",message: true,);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function destroy($id)
     {
-        return $this->service->delete($id);
+        $result = $this->service->delete($id);
+        if($result->status() == Response::HTTP_CODE_SUCCESS)
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess("",message: true,);
     }
 }

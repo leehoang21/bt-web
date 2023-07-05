@@ -38,7 +38,7 @@ class ProductController extends Controller
             'name' => $request->name,
 
         ];
-        $orderBy = $request['order_by']??'id';
+        $orderBy = $request['order_by']??'products.id';
         return $this->productService->getAllProducts($data, $orderBy);
     }
     public function show($slug)

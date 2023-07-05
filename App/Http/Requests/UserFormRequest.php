@@ -14,9 +14,10 @@ class UserFormRequest extends BaseRequest
     public function rules()
     {
         $pass = $this->method() == 'POST' ? 'required|min:6' : 'nullable|min:6';
+        $email = $this->method() == 'POST' ? 'required|email|unique:users,email' : 'required|email';
         return [
             'name'=> 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'email' => $email,
             'password' => $pass,
             'phone' => 'nullable',
 

@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->renderable(function (AuthenticationException $e, $request) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail("Not authenticated",Response:: HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail("Not authenticated",Response:: HTTP_CODE_UNAUTHORIZED,);
         });
     }
 }

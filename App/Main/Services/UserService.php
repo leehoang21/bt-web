@@ -55,14 +55,18 @@ class UserService
             } else {
                 $result = $this->updateData($data);
             }
+
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
+            if($e->getCode() == 23000){
+                return (new \App\Main\Helpers\Response)->responseJsonFail("The email has already been taken. ");
+            }
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(null, message: true);
     }
 
     private function createData($data)

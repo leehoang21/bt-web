@@ -13,11 +13,7 @@ class PostFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $slug = '';
-        if($this->isMethod('put')){
-            $id = $this->post();
-            $slug .= ','.$id.',id';
-        }
+        $slug = $this->method() == 'POST' ? 'required|unique:posts,slug' : 'required';
         return [
             'slug' => $slug,
             'content' => 'required|string',

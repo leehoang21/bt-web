@@ -33,7 +33,7 @@ class PostController extends Controller
         return $this->service->getAll($data);
     }
 
-    public function showBySlug($slug)
+    public function show($slug)
     {
         return $this->service->getBySlug($slug);
     }

@@ -14,10 +14,6 @@ class ProductFormRequest extends BaseRequest
     public function rules()
     {
         $slug = $this->method() == 'POST' ? 'required|unique:products,slug' : 'required';
-        if($this->isMethod('put')){
-            $id = $this->product;
-            $slug .= ','.$id.',id';
-        }
         return [
             'slug' => $slug,
             'name' => 'required|string',
