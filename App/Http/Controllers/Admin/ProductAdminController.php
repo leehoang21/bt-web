@@ -59,12 +59,17 @@ class ProductAdminController extends Controller
                     'total' => $request->total,
                     'serial_number' => $request->serial_number,
                     'warranty_period' =>    $request->warranty_period,
+
                 ],
 
         ];
+
         $result = $this->productService->save($data);
+
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
+
             $images = $request['images'];
+
             $id = json_decode($result->content(), true)['data']['id'];
             $re = $this->imageProductService->createData($id, $images);
             //
@@ -119,9 +124,12 @@ class ProductAdminController extends Controller
 
             ],
         ];
+
         $result = $this->productService->save($data);
+
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
             $images = $request['images'];
+
             $re = $this->imageProductService->updateData($id, $images);
             //
             $tags = $request['tags'];

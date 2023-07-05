@@ -23,6 +23,9 @@ class ProductFormRequest extends BaseRequest
             'id_category' => 'required|exists:categories,id|nullable',
             'images' => 'array',
             'tags' => 'array',
+            'total' => 'required|numeric|min:0',
+            'serial_number' => 'required|string',
+            'warranty_period' => 'required|numeric|min:0',
         ];
     }
 
