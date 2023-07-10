@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductService
 {
@@ -26,11 +27,16 @@ class ProductService
 
     public function getAllProducts( $data,$orderBy) {
         $products = $this->repository->getAllProducts($data,$orderBy);
+        $message = $products['message'];
+        if(isEmpty($message) && $message != 'success'){
+            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
+        }
         $total = $products['total'];
         $limit = $data['limit'];
         $page = $data['page'];
         $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
-        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['products'], $paginate);
+        $product = $products['products'];
+        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($product, $paginate);
     }
 
     public function getBySlug($slug) {

@@ -24,15 +24,37 @@ class ProductRepository extends BaseRepository
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
 
         if (!empty($keyword) && !empty($searchFields)) {
-            for ($i = 0; $i < count($searchFields); $i++) {
-                $searchFields[$i] = 'products.' . $searchFields[$i];
-                $stringLike = '%' . $keyword[$i] . '%';
-                $query->where($searchFields[$i], 'like', $stringLike);
-            }
+            for ($i = 0; $i < count($searchFields); $i++)
 
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'description' || $searchFields[$i] == 'slug' || $searchFields[$i] == 'short_description') {
+                    $searchFields[$i] = 'products.' . $searchFields[$i];
+                    $stringLike = '%' . $keyword[$i] . '%';
+
+                    $query->where($searchFields[$i], 'like', $stringLike);
+                } else if ($searchFields[$i] == 'price_from') {
+                    $query->where('products.price', '>=', $keyword[$i]);
+
+                } else if ($searchFields[$i] == 'price_to') {
+                    $query->where('products.price', '<=', $keyword[$i]);
+                } else if ($searchFields[$i] == 'status') {
+
+                    if ($keyword[$i] == '1') {
+                        $query->where('products.price', '>', 0);
+                    }
+                    if ($keyword[$i] == '2') {
+                        $query->where('products.price', '<=', 0);
+                    }
+
+                } else if ($searchFields[$i] == 'category') {
+                    $query->where('products.id_category', '=', $keyword[$i]);
+                } else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'products' => [],
+                    ];
+                }
         }
-
-
         //pagination
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
@@ -46,7 +68,7 @@ class ProductRepository extends BaseRepository
             'hot' => 'SUM(order_details.quantity)  desc',
         ];
 
-        if($orderBy == 'new' || $orderBy == 'hot')
+        if ($orderBy == 'new' || $orderBy == 'hot')
             $orderBy = $order[$orderBy];
 
         $select = "products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,SUM(order_details.quantity) as order_total";
@@ -54,14 +76,13 @@ class ProductRepository extends BaseRepository
             ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
             ->selectRaw($select)
             ->groupByRaw('products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category')
-
             ->with([
-            'category:id,name,slug',
-            'images:id,url',
-            'orders:id',
-            'tags:id,name',
+                'category:id,name,slug',
+                'images:id,url',
+                'orders:id',
+                'tags:id,name',
 
-        ])
+            ])
             ->orderByRaw($orderBy)
             ->get();
 
@@ -72,10 +93,12 @@ class ProductRepository extends BaseRepository
         return [
             'products' => $products,
             'total' => $total,
+            'message' => 'success',
+
         ];
     }
 
-    public function getProductBySlugCategory($slug,$params)
+    public function getProductBySlugCategory($slug, $params)
     {
         $select = "products.id,products.name,products.description,products.short_description,products.price,categories.slug as category_slug,
         categories.name as category_name,
@@ -106,9 +129,9 @@ class ProductRepository extends BaseRepository
 
             $query->limit($limit)->offset($offset);
         }
-        $stringLikeSlug = '%' . $slug. '%';
+        $stringLikeSlug = '%' . $slug . '%';
         $products = $query
-            ->where('categories.slug','like', $stringLikeSlug)
+            ->where('categories.slug', 'like', $stringLikeSlug)
             ->get();
         $products->map(function ($item) {
             $dto = new ProductDTO($item);
@@ -121,9 +144,17 @@ class ProductRepository extends BaseRepository
 
     }
 
-    public  function  getProductBySlug($slug){
-        $product = $this->findOne('slug',$slug);
-        if(empty($product))
+    public function getProductBySlug($slug)
+    {
+        $product = $this->findOne('slug', $slug)->with([
+            'category:id,name,slug',
+            'images:id,url',
+            'orders:id',
+            'tags:id,name',
+
+        ])->first();
+
+        if (empty($product))
             return null;
         $dto = new ProductDTO($product);
         return $dto->formatData();

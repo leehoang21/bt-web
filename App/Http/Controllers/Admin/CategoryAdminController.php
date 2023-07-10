@@ -6,19 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryFormRequest;
 use App\Main\Config\AppConst;
 
+use App\Main\Helpers\Response;
 use App\Main\Services\CategoryService;
+use App\Main\Services\ImageCategoryService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CategoryAdminController extends Controller
 {
     protected $service;
+    protected ImageCategoryService $imageProductService;
 
     public function __construct(
-        CategoryService $service
+        CategoryService $service,
+        ImageCategoryService $imageProductService,
     )
     {
         $this->service = $service;
+        $this->imageProductService = $imageProductService;
     }
 
     public function index(Request $request)
@@ -27,7 +31,8 @@ class CategoryAdminController extends Controller
         $data = [
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
-            'key_word' => $request->key_word,
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
         ];
         return $this->service->getAll($data);
     }
@@ -46,15 +51,29 @@ class CategoryAdminController extends Controller
 
         ];
 
-        return $this->service->save($data);
-    }
+        $result= $this->service->save($data);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
+        if ($result->status() == Response::HTTP_CODE_SUCCESS) {
+
+            $images = $request['images'];
+
+            $id = json_decode($result->content(), true)['data']['id'];
+
+            $re = $this->imageProductService->createData($id, $images);
+
+            if ($re->status() != Response::HTTP_CODE_SUCCESS)
+                return $re;
+            else
+                return $result;
+        }
+        return (new \App\Main\Helpers\Response)->responseJsonFail(
+            [
+                'message' => 'Create category fail',
+
+            ],
+            Response::RESPONSE_STATUS_FAIL,
+        );
+    }
     public function show($id)
     {
         return $this->service->getById($id);
@@ -70,18 +89,33 @@ class CategoryAdminController extends Controller
                     'slug' => $request['slug'],
                     'color' => $request['color'],
 
+
                 ],
         ];
 
-        return $this->service->save($data);
+        $result= $this->service->save($data);
+
+        if ($result->status() == Response::HTTP_CODE_SUCCESS) {
+            $images = $request['images'];
+
+            $re = $this->imageProductService->updateData($id, $images);
+
+            if ($re->status() != Response::HTTP_CODE_SUCCESS)
+                return $re;
+
+            else
+                return $result;
+        }
+
+        return (new \App\Main\Helpers\Response)->responseJsonFail(
+            [
+                'message' => 'Update category fail',
+
+            ],
+            Response::RESPONSE_STATUS_FAIL,
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
     public function destroy($id)
     {
         return $this->service->delete($id);
