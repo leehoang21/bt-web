@@ -71,6 +71,7 @@ class ProductAdminController extends Controller
             $images = $request['images'];
 
             $id = json_decode($result->content(), true)['data']['id'];
+
             $re = $this->imageProductService->createData($id, $images);
             //
             $tags = $request['tags'];
@@ -126,6 +127,7 @@ class ProductAdminController extends Controller
         ];
 
         $result = $this->productService->save($data);
+
 
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
             $images = $request['images'];
