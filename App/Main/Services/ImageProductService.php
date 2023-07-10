@@ -19,9 +19,11 @@ class ImageProductService
 
     public function createData($id,$images ) {
         DB::beginTransaction();
+
+
         try{
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+                 $this->repository->create(
                     [
                         'id_product' => $id,
                         'id_image' => $images[$i],
@@ -35,15 +37,17 @@ class ImageProductService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
     public  function  updateData($id,$images){
         DB::beginTransaction();
         try{
+
             $this->repository->deleteWhere('id_product',$id);
+
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+                 $this->repository->create(
                     [
                         'id_product' => $id,
                         'id_image' => $images[$i],
@@ -51,13 +55,14 @@ class ImageProductService
                 );
             }
             DB::commit();
+
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
 }

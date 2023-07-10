@@ -25,7 +25,7 @@ class ProductTagService
         DB::beginTransaction();
         try{
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+               $this->repository->create(
                     [
                         'id_product' => $id,
                         'id_tag' => $images[$i],
@@ -39,7 +39,7 @@ class ProductTagService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
     public  function  updateData($id,$images){
@@ -47,7 +47,7 @@ class ProductTagService
         try{
             $this->repository->deleteWhere('id_product',$id);
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+                 $this->repository->create(
                     [
                         'id_product' => $id,
                         'id_tag' => $images[$i],
@@ -61,7 +61,7 @@ class ProductTagService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
 }
