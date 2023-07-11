@@ -40,7 +40,8 @@ class ProductService
     }
 
     public function getBySlug($slug) {
-        return $this->repository->getProductBySlug($slug);
+        $result =  $this->repository->getProductBySlug($slug);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 
     public function getProductBySlugCategory($slug,$data) {

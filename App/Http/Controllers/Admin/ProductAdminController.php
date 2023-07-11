@@ -102,9 +102,7 @@ class ProductAdminController extends Controller
     public function show($slug)
     {
         $result =  $this->productService->getBySlug($slug);
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess(
-            $result
-        );
+        return $result;
     }
 
 
