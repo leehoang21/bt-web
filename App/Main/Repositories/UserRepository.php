@@ -18,6 +18,25 @@ class UserRepository extends BaseRepository
     public function getAll(array $params = [], $orderBy = 'id')
     {
         $query = User::query();
+        //search
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++)
+
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'status' ||   $searchFields[$i] == 'email' ) {
+                    $stringLike = '%' . $keyword[$i] . '%';
+                    $query->where($searchFields[$i], 'like', $stringLike);
+                } else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'data' => [],
+                    ];
+                }
+        }
+        //pagination
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
         if (!empty($params['key_word']) && is_string($params['key_word'])) {
@@ -41,6 +60,7 @@ class UserRepository extends BaseRepository
         return [
             'data' => $data,
             'total' => $total,
+            'message' => 'success',
         ];
     }
 
