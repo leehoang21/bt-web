@@ -57,21 +57,17 @@ class UserAdminController extends Controller
         return $this->service->getById($id);
     }
 
-    public function update(UserFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = [
-            'id' => $id,
-            'data' =>
-                [
-                    'name' => $request['name'],
-                    'email' => $request['email'],
-                    'password' => $request['password'],
-                    'phone' => $request['phone'],
-                    'status' => $request['status'],
-                ],
-        ];
 
-        return $this->service->save($data);
+        return response(
+            [
+                'status' => 400,
+                'message' => 'Not found',
+            ]
+            ,
+            0,
+        );
     }
 
     /**
