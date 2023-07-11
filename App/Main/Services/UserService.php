@@ -6,6 +6,7 @@ use App\Main\Helpers\Response;
 use App\Main\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class UserService
 {
@@ -27,6 +28,10 @@ class UserService
     public function getAll($data)
     {
         $result = $this->repository->getAll($data);
+        $message = $result['message'];
+        if(isEmpty($message) && $message != 'success'){
+            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
+        }
         $total = $result['total'];
         $limit = $data['limit'];
         $page = $data['page'];

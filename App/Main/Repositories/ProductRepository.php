@@ -146,13 +146,16 @@ class ProductRepository extends BaseRepository
 
     public function getProductBySlug($slug)
     {
-        $product = $this->findOne('slug', $slug)->with([
-            'category:id,name,slug',
-            'images:id,url',
-            'orders:id',
-            'tags:id,name',
 
-        ])->first();
+        $product = Product::query()
+            ->where('slug','=', $slug)
+            ->with([
+                'category:id,name,slug',
+                'images:id,url',
+                'orders:id',
+                'tags:id,name',
+            ])
+            ->first();
 
         if (empty($product))
             return null;
