@@ -128,7 +128,6 @@ class ProductAdminController extends Controller
 
         $result = $this->productService->save($data);
 
-
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
             $images = $request['images'];
 
@@ -143,7 +142,6 @@ class ProductAdminController extends Controller
             else
                 return $result;
         }
-
         return (new \App\Main\Helpers\Response)->responseJsonFail(
             [
                 'message' => 'Update product fail',

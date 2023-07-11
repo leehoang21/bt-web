@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Main\Repositories;
+
 use App\Main\BaseResponse\BaseRepository;
 use App\Models\User;
 
@@ -32,6 +33,10 @@ class UserRepository extends BaseRepository
         $query->get();
         $data = $query
             ->orderBy($orderBy)
+            ->with([
+
+                'avatar:id,url',
+            ])
             ->get();
         return [
             'data' => $data,
@@ -42,15 +47,19 @@ class UserRepository extends BaseRepository
     public function getById($id)
     {
         $data = User::query()
+            ->with([
 
+                'avatar:id,url',
+            ])
             ->find($id);
         return $data;
     }
 
-    public function getEmail(){
+    public function getEmail()
+    {
         $data = User::query()
-        ->select('email')
-        ->get();
+            ->select('email')
+            ->get();
         return $data;
     }
 
