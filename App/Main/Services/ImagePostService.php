@@ -22,7 +22,7 @@ class ImagePostService
         DB::beginTransaction();
         try{
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+                 $this->repository->create(
                     [
                         'id_post' => $id,
                         'id_image' => $images[$i],
@@ -36,7 +36,7 @@ class ImagePostService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
     public  function  updateData($id,$images){
@@ -44,7 +44,7 @@ class ImagePostService
         try{
             $this->repository->deleteWhere('id_post',$id);
             for ($i=0; $i < count($images); $i++) {
-                $result =  $this->repository->create(
+             $this->repository->create(
                     [
                         'id_post' => $id,
                         'id_image' => $images[$i],
@@ -58,7 +58,7 @@ class ImagePostService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess(true,message: 'update success');
     }
 
 }

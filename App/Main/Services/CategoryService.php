@@ -7,6 +7,7 @@ use App\Main\Repositories\CategoryRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class CategoryService
 {
@@ -22,6 +23,10 @@ class CategoryService
 
     public function getAll( $data) {
         $result = $this->repository->getAll($data);
+        $message = $result['message'];
+        if(isEmpty($message) && $message != 'success'){
+            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
+        }
         $total = $result['total'];
         $limit = $data['limit'];
         $page = $data['page'];

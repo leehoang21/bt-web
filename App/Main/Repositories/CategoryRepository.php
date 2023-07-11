@@ -32,9 +32,10 @@ class CategoryRepository extends BaseRepository
                     $query->where($searchFields[$i], 'like', $stringLike);
                 }else {
                     return [
-                        'data' => 'search field not found',
+                        'message' => 'search field not found',
                         'total' => 0,
-                        'products' => [],
+                        'data' => [],
+
                     ];
                 }
         }

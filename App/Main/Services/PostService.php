@@ -7,6 +7,7 @@ use App\Main\Repositories\PostRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class PostService
 {
@@ -21,12 +22,16 @@ class PostService
     }
 
     public function getAll( $data) {
-        $products = $this->repository->getAll($data);
-        $total = $products['total'];
+        $result = $this->repository->getAll($data);
+        $message = $result['message'];
+        if(isEmpty($message) && $message != 'success'){
+            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
+        }
+        $total = $result['total'];
         $limit = $data['limit'];
         $page = $data['page'];
         $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
-        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['posts'], $paginate);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($result['posts'], $paginate);
     }
 
     public function getById($id) {

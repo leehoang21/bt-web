@@ -17,13 +17,30 @@ class PostRepository extends BaseRepository
     public function getAll(array $params = [], $orderBy = 'id')
     {
         $query = Post::query();
+        //search
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++)
+
+                if ($searchFields[$i] == 'title' || $searchFields[$i] == 'slug' || $searchFields[$i] == 'content') {
+
+                    $stringLike = '%' . $keyword[$i] . '%';
+
+                    $query->where($searchFields[$i], 'like', $stringLike);
+                }else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'posts' => [],
+                    ];
+                }
+        }
+
+        //pagination
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
-        if (!empty($params['key_word']) && is_string($params['key_word'])) {
-            $stringLike = '%' . $params['key_word'] . '%';
-            $query->where('content', 'like', $stringLike);
-
-        }
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
@@ -44,6 +61,7 @@ class PostRepository extends BaseRepository
         return [
             'posts' => $post,
             'total' => $total,
+            'message' => 'success',
         ];
     }
 
@@ -51,7 +69,7 @@ class PostRepository extends BaseRepository
     {
         $post = Post::query()
             ->with([
-                'images:url',
+                'images:url,id',
                 'tags:name,id,slug'
             ])
             ->find($id);
@@ -63,7 +81,7 @@ class PostRepository extends BaseRepository
     {
         $post = Post::query()
             ->with([
-                'images:url',
+                'images:url,id',
             ]);
         $post = $post->where('slug', $slug)->first();
         $dto = new PostDTO($post);
