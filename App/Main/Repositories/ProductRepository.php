@@ -39,10 +39,10 @@ class ProductRepository extends BaseRepository
                 } else if ($searchFields[$i] == 'status') {
 
                     if ($keyword[$i] == '1') {
-                        $query->where('products.price', '>', 0);
+                        $query->where('products.total', '>', 0);
                     }
                     if ($keyword[$i] == '2') {
-                        $query->where('products.price', '<=', 0);
+                        $query->where('products.total', '<=', 0);
                     }
 
                 } else if ($searchFields[$i] == 'category') {

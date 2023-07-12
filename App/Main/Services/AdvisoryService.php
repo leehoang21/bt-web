@@ -7,6 +7,7 @@ use App\Main\Repositories\AdvisoryRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class AdvisoryService
 {
@@ -22,6 +23,10 @@ class AdvisoryService
 
     public function getAll( $data) {
         $result = $this->repository->getAll($data);
+        $message = $result['message'];
+        if(isEmpty($message) && $message != 'success'){
+            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
+        }
         $total = $result['total'];
         $limit = $data['limit'];
         $page = $data['page'];
@@ -62,24 +67,28 @@ class AdvisoryService
     }
 
     private function updateData($data) {
+        $advisory = $this->repository->findOrFail($data['id']);
+        if( !isEmpty($data['data']['slug'])){
+            $advisory->content = $data['data']['content'];
+        }
+        if( !isEmpty($data['data']['name'])){
+            $advisory->name = $data['data']['name'];
+        }
+        if( !isEmpty($data['data']['description'])){
+            $advisory->email = $data['data']['email'];
+        }
+        if( !isEmpty($data['data']['image'])){
+            $advisory->phone = $data['data']['phone'];
+        }
+        if( !isEmpty($data['data']['status'])){
+            $advisory->status = $data['data']['status'];
+        }
+
 
         return $this->repository->update('id', $data['id'], $data['data']);
     }
 
     public function delete($id) {
-        DB::beginTransaction();
-        try{
-            $product = $this->repository->findOrFail($id);
-
-            $result = $this->repository->delete($id);
-            DB::commit();
-        } catch (Throwable $e) {
-            DB::rollBack();
-
-            Log::warning($e->getMessage());
-            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
-        }
-
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess('',message: true);
+        return (new \App\Main\Helpers\Response)->responseJsonFail(false);
     }
 }

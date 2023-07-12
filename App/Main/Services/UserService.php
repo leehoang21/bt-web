@@ -58,6 +58,7 @@ class UserService
 
                 $result = $this->createData($data);
             } else {
+                error_log('hee');
                 $result = $this->updateData($data);
             }
 
@@ -86,10 +87,7 @@ class UserService
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
-        $user->name = $data['data']['name'];
-        $user->phone = $data['data']['phone'];
-        $user->email = $data['data']['email'];
-
+        $user->status = $data['data']['status'];
         $user->save();
         return $user;
     }
@@ -101,6 +99,7 @@ class UserService
                 'id' => $id,
                 'data' => [
                     'status' => 2
+
                 ]
             ]
         );

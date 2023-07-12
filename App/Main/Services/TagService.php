@@ -55,7 +55,7 @@ class TagService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess(null,message: true);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 
     private function createData($data) {

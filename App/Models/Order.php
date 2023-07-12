@@ -19,6 +19,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    public function avatar()
+    {
+        return $this->belongsToMany(Avatar::class, 'users', 'id_user', 'id_avatar');
+    }
+
     public function products()
     {
         return $this->belongsToMany(Product::class, 'order_details', 'id_order', 'id_product');

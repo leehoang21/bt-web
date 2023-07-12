@@ -19,14 +19,33 @@ class AdvisoryRepository extends BaseRepository
     public function getAll(array $params = [], $orderBy = 'id')
     {
         $query = Advisory::query();
+        //search
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++)
+
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'phone' || $searchFields[$i] == 'status' ) {
+
+                    $stringLike = '%' . $keyword[$i] . '%';
+
+                    $query->where($searchFields[$i], 'like', $stringLike);
+                }else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'data' => [],
+
+                    ];
+                }
+        }
+
+        $total = $query->count();
+        //pagination
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
-        if (!empty($params['key_word']) && is_string($params['key_word'])) {
-            $stringLike = '%' . $params['key_word'] . '%';
-            $query->where('name', 'like', $stringLike);
 
-        }
-        $total = $query->count();
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
@@ -43,6 +62,7 @@ class AdvisoryRepository extends BaseRepository
         return [
             'data' => $data,
             'total' => $total,
+            'message' => 'success'
         ];
     }
 

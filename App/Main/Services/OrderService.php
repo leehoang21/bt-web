@@ -82,6 +82,7 @@ class OrderService
 
 
     private function updateData($data) {
+
         $value = [
             'status' => $data['status'],
         ];
