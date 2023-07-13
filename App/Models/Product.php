@@ -14,7 +14,6 @@ class Product extends Model
         'slug',
         'description',
         'price',
-        'id_category',
         'status',
         'total',
         'serial_number',
@@ -22,9 +21,9 @@ class Product extends Model
     ];
 
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class, 'id_category');
+        return $this->belongsToMany(Category::class, 'product_categories', 'id_product', 'id_category');
     }
 
     public function images()

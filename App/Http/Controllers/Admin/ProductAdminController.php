@@ -7,6 +7,7 @@ use App\Http\Requests\ProductFormRequest;
 use App\Main\Config\AppConst;
 use App\Main\Helpers\Response;
 use App\Main\Services\ImageProductService;
+use App\Main\Services\ProductCategoryService;
 use App\Main\Services\ProductService;
 use App\Main\Services\ProductTagService;
 use Illuminate\Http\Request;
@@ -16,17 +17,20 @@ class ProductAdminController extends Controller
     protected $productService;
     protected ImageProductService $imageProductService;
     protected ProductTagService $productTagService;
+    protected ProductCategoryService $productCategoryService;
 
     public function __construct(
-        ProductService      $productService,
-        ImageProductService $imageProductService,
-        ProductTagService   $productTagService
+        ProductService         $productService,
+        ImageProductService    $imageProductService,
+        ProductTagService      $productTagService,
+        ProductCategoryService $productCategoryService
 
     )
     {
         $this->productService = $productService;
         $this->imageProductService = $imageProductService;
         $this->productTagService = $productTagService;
+        $this->productCategoryService = $productCategoryService;
     }
 
     public function index(Request $request)
@@ -55,10 +59,10 @@ class ProductAdminController extends Controller
                     'price' => $request->price,
                     'slug' => $request->slug,
                     'description' => $request->description,
-                    'id_category' => $request->id_category,
+
                     'total' => $request->total,
                     'serial_number' => $request->serial_number,
-                    'warranty_period' =>    $request->warranty_period,
+                    'warranty_period' => $request->warranty_period,
 
                 ],
 
@@ -67,30 +71,22 @@ class ProductAdminController extends Controller
         $result = $this->productService->save($data);
 
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
-
+            //add images
             $images = $request['images'];
 
             $id = json_decode($result->content(), true)['data']['id'];
 
             $re = $this->imageProductService->createData($id, $images);
-            //
+            //add tags
             $tags = $request['tags'];
             $res = $this->productTagService->createData($id, $tags);
-            if ($re->status() != Response::HTTP_CODE_SUCCESS)
-                return $re;
-            else if ($res->status() != Response::HTTP_CODE_SUCCESS)
-                return $res;
-            else
-                return $result;
+            //add catigories
+            $categories = $request['categories'];
+            $r = $this->productCategoryService->createData($id, $categories);
+            //check status
+
         }
-        return (new \App\Main\Helpers\Response)->responseJsonFail(
-            [
-                'message' => 'Create product fail',
-
-            ],
-            Response::RESPONSE_STATUS_FAIL,
-        );
-
+        return $result;
     }
 
     /**
@@ -101,7 +97,7 @@ class ProductAdminController extends Controller
      */
     public function show($slug)
     {
-        $result =  $this->productService->getBySlug($slug);
+        $result = $this->productService->getBySlug($slug);
         return $result;
     }
 
@@ -116,10 +112,10 @@ class ProductAdminController extends Controller
                 'price' => $request->price,
                 'slug' => $request->slug,
                 'description' => $request->description,
-                'id_category' => $request->id_category,
+
                 'total' => $request->total,
                 'serial_number' => $request->serial_number,
-                'warranty_period' =>    $request->warranty_period,
+                'warranty_period' => $request->warranty_period,
 
             ],
         ];
@@ -127,26 +123,19 @@ class ProductAdminController extends Controller
         $result = $this->productService->save($data);
 
         if ($result->status() == Response::HTTP_CODE_SUCCESS) {
+            //add images
             $images = $request['images'];
 
             $re = $this->imageProductService->updateData($id, $images);
-            //
+            //tags
             $tags = $request['tags'];
             $res = $this->productTagService->updateData($id, $tags);
-            if ($re->status() != Response::HTTP_CODE_SUCCESS)
-                return $re;
-            else if ($res->status() != Response::HTTP_CODE_SUCCESS)
-                return $res;
-            else
-                return $result;
-        }
-        return (new \App\Main\Helpers\Response)->responseJsonFail(
-            [
-                'message' => 'Update product fail',
+            //add catigories
+            $categories = $request['categories'];
+            $r = $this->productCategoryService->updateData($id, $categories);
 
-            ],
-            Response::RESPONSE_STATUS_FAIL,
-        );
+        }
+        return $result;
     }
 
     /**

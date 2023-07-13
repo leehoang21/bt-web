@@ -20,7 +20,7 @@ class ProductFormRequest extends BaseRequest
             'description' => 'required|string',
             'short_description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'id_category' => 'required|exists:categories,id|nullable',
+            'categories' => 'array',
             'images' => 'array',
             'tags' => 'array',
             'total' => 'required|numeric|min:0',
