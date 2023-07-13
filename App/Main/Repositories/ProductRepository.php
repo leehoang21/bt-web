@@ -39,10 +39,10 @@ class ProductRepository extends BaseRepository
                 } else if ($searchFields[$i] == 'status') {
 
                     if ($keyword[$i] == '1') {
-                        $query->where('products.price', '>', 0);
+                        $query->where('products.total', '>', 0);
                     }
                     if ($keyword[$i] == '2') {
-                        $query->where('products.price', '<=', 0);
+                        $query->where('products.total', '<=', 0);
                     }
 
                 } else if ($searchFields[$i] == 'category') {
@@ -77,7 +77,7 @@ class ProductRepository extends BaseRepository
             ->selectRaw($select)
             ->groupByRaw('products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category')
             ->with([
-                'category:id,name,slug',
+                'categories:id,name,slug',
                 'images:id,url',
                 'orders:id',
                 'tags:id,name',
@@ -150,7 +150,7 @@ class ProductRepository extends BaseRepository
         $product = Product::query()
             ->where('slug','=', $slug)
             ->with([
-                'category:id,name,slug',
+                'categories:id,name,slug',
                 'images:id,url',
                 'orders:id',
                 'tags:id,name',

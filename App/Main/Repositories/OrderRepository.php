@@ -18,6 +18,7 @@ class OrderRepository extends BaseRepository
     public function getAll(array $params = [])
     {
         $query = Order::query();
+
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
 
@@ -26,19 +27,13 @@ class OrderRepository extends BaseRepository
         $end = $params['end'] ?? null;
         $status = $params['status'] ?? null;
         if (!empty($start) && !empty($end)) {
-
-            if ($status != null) {
-                error_log($status);
-                $query->where('status', $status);
-            }
-            $query->whereBetween('updated_at', [$start, $end]);
+            $query->whereBetween('orders.created_at', [$start, $end]);
         }
-        //pagination
-
-        if (!empty($limit) && !empty($page)) {
-            $offset = ($page - 1) * $limit;
-            $query->limit($limit)->offset($offset);
+        if ($status != null) {
+            error_log($status);
+            $query->where('orders.status', $status);
         }
+
         //order by
         $order = [
             'total' => 'SUM(order_details.quantity) ',
@@ -57,27 +52,38 @@ class OrderRepository extends BaseRepository
             $orderBy = 'orders.id';
         }
         //select
-        $select = "orders.id,orders.id_user,orders.status,SUM(order_details.quantity) as total,SUM(products.price*order_details.quantity) as total_price  ";
+        $select = "orders.id,orders.id_user,orders.status,SUM(order_details.quantity) as total,SUM(products.price*order_details.quantity) as total_price,orders.created_at,orders.updated_at";
 
-        $order = $query->with([
+         $query->with([
 
             'user:id,name,email,phone',
+            'user.avatar:id,url',
             'products:id,name,price',
             'orderDetails:id_order,id_product,quantity'
 
         ])->selectRaw(
             $select
-        )->join('order_details', 'orders.id', '=', 'order_details.id_order')
-            ->join('products', 'products.id', '=', 'order_details.id_product')
-            ->groupByRaw('orders.id_user,orders.status,orders.id')
-            ->orderByRaw($orderBy)
-            ->get();
+        )->leftJoin('order_details', 'orders.id', '=', 'order_details.id_order')
+            ->leftJoin('products', 'products.id', '=', 'order_details.id_product')
+            ->groupByRaw('orders.id_user,orders.status,orders.id,orders.created_at,orders.updated_at')
+            ->orderByRaw($orderBy);
+
+
+        $total = $query->get()->count();
+        //pagination
+
+        if (!empty($limit) && !empty($page)) {
+            $offset = ($page - 1) * $limit;
+            $query->limit($limit)->offset($offset);
+        }
+        $order = $query->get();
+
         $order->map(function ($item) {
             $dto = new OrderDTO($item);
 
             return $dto->formatData();
         });
-        $total = $order->count();
+
         return [
             'orders' => $order,
             'total' => $total,

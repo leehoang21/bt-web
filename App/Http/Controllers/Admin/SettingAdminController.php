@@ -27,7 +27,8 @@ class SettingAdminController extends Controller
         $data = [
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
-            'key_word' => $request->key_word,
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
         ];
         return $this->service->getAll($data);
     }
@@ -43,7 +44,6 @@ class SettingAdminController extends Controller
                 ],
 
         ];
-
         return $this->service->save($data);
     }
     public function show($id)

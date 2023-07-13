@@ -24,6 +24,28 @@ class TagRepository extends BaseRepository
             $query->where('content', 'like', $stringLike);
 
         }
+        //search
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++)
+
+                if ($searchFields[$i] == 'name') {
+
+                    $stringLike = '%' . $keyword[$i] . '%';
+
+                    $query->where($searchFields[$i], 'like', $stringLike);
+                }else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'data' => [],
+
+                    ];
+                }
+        }
+        //pagination
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;

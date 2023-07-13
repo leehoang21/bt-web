@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Support\Str;
 
-class AdvisoryRequest extends BaseRequest
+class CreateOderAdminRequest extends BaseRequest
 {
 
     /**
@@ -13,13 +12,10 @@ class AdvisoryRequest extends BaseRequest
      */
     public function rules()
     {
-
         return [
-            'phone'=> 'required',
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'content' => 'required|string',
-            'status'=>'integer',
+            'id_product' => 'required',
+            'total' => 'required',
+            'id_user' => 'id_user',
         ];
     }
 
@@ -34,7 +30,7 @@ class AdvisoryRequest extends BaseRequest
     {
         $this->merge([
 
-            'slug' => Str::slug($this->slug),
+
 
         ]);
     }

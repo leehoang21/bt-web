@@ -4,6 +4,7 @@ namespace App\Main\BaseResponse;
 
 use Dotenv\Repository\RepositoryInterface;
 use Illuminate\Support\Facades\App;
+use function PHPUnit\Framework\isEmpty;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -123,8 +124,10 @@ abstract class BaseRepository implements RepositoryInterface
     {
         //reset model
         $this->getModel();
+        //update
+        $this->model->where($attribute, '=', $value)->update($data);
 
-        return $this->model->where($attribute, '=', $value)->update($data);
+        return $this->model->where($attribute, '=', $value)->get();
     }
 
     public function updateOrCreate($id, array $data)
