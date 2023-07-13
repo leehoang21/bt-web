@@ -9,7 +9,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/auth/login', [AuthAdminController::class,'login']);
 //    Route::post('/auth/verify', [AuthAdminController::class,'verify']);
 //    Route::post('/auth/send_verify', [AuthAdminController::class,'sendVerify']);
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum','admin'])->group(function () {
 
         Route::post('/update_image/{id}', [\App\Http\Controllers\Admin\ImageAdminController::class,'update']);
         Route::apiResource('/product', ProductAdminController::class);

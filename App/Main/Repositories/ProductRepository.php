@@ -71,11 +71,11 @@ class ProductRepository extends BaseRepository
         if ($orderBy == 'new' || $orderBy == 'hot')
             $orderBy = $order[$orderBy];
 
-        $select = "products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category,SUM(order_details.quantity) as order_total";
+        $select = "products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,SUM(order_details.quantity) as order_total";
         $products = $query
             ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
             ->selectRaw($select)
-            ->groupByRaw('products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price,products.id_category')
+            ->groupByRaw('products.total,products.serial_number,products.warranty_period,products.id,products.name,products.slug,products.description,products.short_description,products.price')
             ->with([
                 'categories:id,name,slug',
                 'images:id,url',
