@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
 
             'name' => 'Admin',
             'user_name' => 'admin',
-            'email' => 'hh@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
             'remember_token' => '12345456'
         ];
