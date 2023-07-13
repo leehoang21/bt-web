@@ -13,9 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-                \Illuminate\Support\Facades\DB::update(
-            'ALTER TABLE settings ADD CONSTRAINT pk_setting PRIMARY KEY(type,content)'
-        );
+        \Illuminate\Support\Facades\DB::update('ALTER TABLE settings DROP COLUMN id');
+
+        Schema::table('settings', function (Blueprint $table) {
+
+
+            $table->primary(['type'], 'pk_settings');
+
+
+        });
+
     }
 
     /**
@@ -25,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('settings');
+
     }
 };
