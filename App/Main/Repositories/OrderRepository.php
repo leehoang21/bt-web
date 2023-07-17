@@ -61,6 +61,7 @@ class OrderRepository extends BaseRepository
             'products:id,name,price',
             'orderDetails:id_order,id_product,quantity'
 
+
         ])->selectRaw(
             $select
         )->leftJoin('order_details', 'orders.id', '=', 'order_details.id_order')

@@ -32,7 +32,7 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'id_order');
+        return $this->hasOne(OrderDetail::class, 'id_order');
     }
 
     public function totalPrice()

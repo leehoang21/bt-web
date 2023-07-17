@@ -8,6 +8,7 @@ use App\Http\Requests\OderRequest;
 use App\Main\Config\AppConst;
 use App\Main\Services\OrderService;
 use Illuminate\Http\Request;
+use function Sodium\add;
 
 class OrderAdminController extends Controller
 {
@@ -30,7 +31,7 @@ class OrderAdminController extends Controller
             'start' => $request->start,
             'end' => $request->end,
             'status' => $request->status,
-            //'order_by' => $request->order_by,
+            'order_by' => $request->order_by,
         ];
         return $this->service->getAll($data);
     }
@@ -42,14 +43,23 @@ class OrderAdminController extends Controller
             'id_user' => $request->id_user,
             'status' => AppConst::ORDER_STATUS_PENDING,
         ];
-        $orderDetail = [
-            'id_product' => $request->id_product,
-            'quantity' => $request->total,
-        ];
+        $products = $request->products;
+        $arrOrder = [];
+        for ($i = 0; $i < count($products); $i++) {
+            $orderDetail = [
+                'id_product' => $products[$i],
+                'quantity' => $request->array_total[$i],
+            ];
+            $arrOrder[$i] = [
+                'order' => $order,
+                'order_detail' => $orderDetail,
+            ];
+        }
         $data = [
-            'order' => $order,
-            'order_detail' => $orderDetail,
+            'orders' => $arrOrder,
+
         ];
+
         return $this->service->save($data);
     }
 
