@@ -67,7 +67,7 @@ class AuthService
             return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('authToken')->plainTextToken;
 
         return response(
             [

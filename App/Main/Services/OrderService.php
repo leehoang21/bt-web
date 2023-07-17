@@ -63,19 +63,30 @@ class OrderService
 
     private function createData($data) {
 
-        $result = $this->repository->create($data['order']);
-        $data['order_detail']['id_order'] = $result->id;
-        $result2 = $this->orderDetail->create($data['order_detail']);
-        if(!$result || !$result2 ){
-            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+        $orders = $data['orders'];
+
+        $result = $this->repository->create($orders[0]['order']);
+        $products = [];
+        $array_total = [];
+
+        for ($i = 0; $i < count($orders); $i++) {
+            $orders[$i]['order_detail']['id_order'] = $result->id;
+            $products[$i] = $orders[$i]['order_detail']['id_product'];
+            $array_total[$i] = $orders[$i]['order_detail']['quantity'];
+
+
+            $result2 = $this->orderDetail->create($orders[$i]['order_detail']);
+            if (!$result2) {
+                return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+            }
         }
         return  [
             'id' => $result->id,
             'status' => $result->status,
             'created_at' => $result->created_at,
             'updated_at' => $result->updated_at,
-            'id_product' => $result2->id_product,
-            'total' => $result2->quantity,
+            'products' => $products,
+            'total' => $array_total,
         ];
 
     }

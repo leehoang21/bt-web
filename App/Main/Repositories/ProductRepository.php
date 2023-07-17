@@ -45,8 +45,6 @@ class ProductRepository extends BaseRepository
                         $query->where('products.total', '<=', 0);
                     }
 
-                } else if ($searchFields[$i] == 'category') {
-                    $query->where('products.id_category', '=', $keyword[$i]);
                 } else {
                     return [
                         'message' => 'search field not found',
@@ -80,6 +78,9 @@ class ProductRepository extends BaseRepository
                 'categories:id,name,slug',
                 'images:id,url',
                 'orders:id',
+                'orders.user:id,name,email,phone',
+                'orders.orderDetails:quantity,id_order',
+
                 'tags:id,name',
 
             ])
