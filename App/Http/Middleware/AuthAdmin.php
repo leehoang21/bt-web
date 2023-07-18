@@ -21,10 +21,7 @@ class AuthAdmin
 
             return (new Response)->responseJsonFail("Not authenticated",Response:: HTTP_CODE_UNAUTHORIZED,);
         }
-        if (! $request->expectsJson()) {
 
-            return (new Response)->responseJsonFail("Not authenticated",Response:: HTTP_CODE_UNAUTHORIZED,);
-        }
         return $next($request);
     }
 }

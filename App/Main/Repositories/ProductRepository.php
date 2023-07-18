@@ -4,7 +4,9 @@ namespace App\Main\Repositories;
 
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\ProductDTO;
+use App\Models\Category;
 use App\Models\Product;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductRepository extends BaseRepository
 {
@@ -101,46 +103,31 @@ class ProductRepository extends BaseRepository
 
     public function getProductBySlugCategory($slug, $params)
     {
-        $select = "products.id,products.name,products.description,products.short_description,products.price,categories.slug as category_slug,
-        categories.name as category_name,
-        categories.id as category_id
-        ";
-        $query = Product::query()
-            ->join('categories', 'products.id_category', '=', 'categories.id')
-            ->selectRaw($select
-            )->with([
-
-                'images:id,url',
-                'orders:id',
-                'tags:id,name',
-
+        $query = Category::query()
+            ->with([
+                'products:id,name,slug,description,short_description,price',
+                'products.images:id,url',
+                'products.orders:id,id_user',
+                'products.orders.user:id,name,email,phone',
+                'products.tags:id,name',
             ]);
-        $page = $params['page'] ?? null;
-        $limit = $params['limit'] ?? null;
+
         //search
         if (!empty($params['name']) && is_string($params['name'])) {
             $stringLike = '%' . $params['name'] . '%';
             $query->where('name', 'like', $stringLike);
 
         }
-        //pagination
-        $total = $query->count();
-        if (!empty($limit) && !empty($page)) {
-            $offset = ($page - 1) * $limit;
 
-            $query->limit($limit)->offset($offset);
-        }
-        $stringLikeSlug = '%' . $slug . '%';
         $products = $query
-            ->where('categories.slug', 'like', $stringLikeSlug)
+            ->where('slug', '=', $slug)
+            ->limit(1)
             ->get();
-        $products->map(function ($item) {
-            $dto = new ProductDTO($item);
-            return $dto->formatData();
-        });
+
+
         return [
             'products' => $products,
-            'total' => $total,
+
         ];
 
     }
