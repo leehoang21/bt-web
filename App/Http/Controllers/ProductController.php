@@ -52,8 +52,7 @@ class ProductController extends Controller
     {
         $page = (int)$request->page;
         $data = [
-            'page' => !empty($page) ? abs($page) : 1,
-            'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
+
             'name' => $request->name,
 
         ];

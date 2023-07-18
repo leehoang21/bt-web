@@ -2,41 +2,26 @@
 
 namespace App\Main\Services;
 
-use App\Main\DTO\ProductDTO;
-use App\Main\Helpers\Response;
 use App\Main\Repositories\AdminRepository;
+use App\Main\Repositories\DashboardRepository;
 use App\Main\Repositories\ProductRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 use function PHPUnit\Framework\isEmpty;
 
-class ProductService
+class DashboardService
 {
-    protected AdminRepository $adminRepository;
+    protected DashboardRepository $repository;
     public function __construct(
-        ProductRepository $repository,
-
-
+        DashboardRepository $repository,
     )
     {
         $this->repository = $repository;
-
     }
 
-    public function getAllProducts( $data,$orderBy) {
-        $products = $this->repository->getAllProducts($data,$orderBy);
-        $message = $products['message'];
-        if(isEmpty($message) && $message != 'success'){
-            return (new \App\Main\Helpers\Response)->responseJsonFail($message);
-        }
-        $total = $products['total'];
-        $limit = $data['limit'];
-        $page = $data['page'];
-        $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
-        $product = $products['products'];
-        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($product, $paginate);
+    public function getRevenue( $data) {
+        $result = $this->repository->getRevenue($data);
+        $data = $result['data'];
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($data, );
     }
 
     public function getBySlug($slug) {
@@ -46,8 +31,11 @@ class ProductService
 
     public function getProductBySlugCategory($slug,$data) {
         $products = $this->repository->getProductBySlugCategory($slug,$data);
-
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($products['products']);
+        $total = $products['total'];
+        $limit = $data['limit'];
+        $page = $data['page'];
+        $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['products'], $paginate);
     }
 
 
