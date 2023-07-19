@@ -85,7 +85,9 @@ class CategoryRepository extends BaseRepository
 
     public function getProductBySlugCategory($slug, $params)
     {
-        $query = $this->findOne( 'slug',$slug)
+        $query = Category::query()
+            ->where('slug', $slug)
+
             ->with([
                 'products:id,name,slug,description,short_description,price',
                 'products.images:id,url',
