@@ -94,6 +94,7 @@ class CategoryRepository extends BaseRepository
                 'products.orders:id,id_user',
                 'products.orders.user:id,name,email,phone',
                 'products.tags:id,name',
+                'products.categories:id,name,slug',
             ]);
 
         //search
