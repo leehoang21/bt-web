@@ -3,7 +3,6 @@
 namespace App\Main\Repositories;
 
 use App\Main\BaseResponse\BaseRepository;
-use App\Main\DTO\ProductDTO;
 use App\Models\Product;
 
 class DashboardRepository extends BaseRepository
@@ -12,6 +11,7 @@ class DashboardRepository extends BaseRepository
     {
         return Product::class;
     }
+
     public function getRevenue(array $params = [])
     {
         $query = Product::query();
@@ -26,57 +26,69 @@ class DashboardRepository extends BaseRepository
 
 
         return [
-            'data' =>$products,
+            'data' => $products,
 
         ];
     }
 
-    public function getProductBySlugCategory($slug, $params)
+    public function getHotProducts(array $params = [])
     {
-        $select = "products.id,products.name,products.description,products.short_description,products.price,categories.slug as category_slug,
-        categories.name as category_name,
-        categories.id as category_id
-        ";
-        $query = Product::query()
-            ->join('categories', 'products.id_category', '=', 'categories.id')
-            ->selectRaw($select
-            )->with([
+        $orderBy = $params['order_by'] ?? 'total';
+        //order by
+        $order = [
+            'price' => 'SUM(order_details.quantity*products.price) desc',
+            'total' => 'SUM(order_details.quantity) desc',
+        ];
+        if ($orderBy == 'price' || $orderBy == 'total')
+            $orderBy = $order[$orderBy];
+        else
+            $orderBy = $order['total'];
+        //query
+        $query = Product::query();
 
+        $select = "SUM(order_details.quantity*products.price) as total_price,SUM(order_details.quantity) as total," .
+            "products.id," .
+            "products.name," .
+            "products.slug," .
+            "products.price," .
+            "products.short_description," .
+            "products.description," .
+
+            "products.total as total_product";
+
+
+        $products = $query
+            ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
+            ->selectRaw($select)
+            ->with([
+                'categories:id,name,slug',
                 'images:id,url',
                 'orders:id',
+                'orders.user:id,name,email,phone',
+                'orders.orderDetails:quantity,id_order',
                 'tags:id,name',
 
-            ]);
-        $page = $params['page'] ?? null;
-        $limit = $params['limit'] ?? null;
-        //search
-        if (!empty($params['name']) && is_string($params['name'])) {
-            $stringLike = '%' . $params['name'] . '%';
-            $query->where('name', 'like', $stringLike);
+            ])
+            ->groupByRaw(
+                "products.id," .
+                "products.name," .
+                "products.slug," .
+                "products.price," .
+                "products.short_description," .
+                "products.description," .
 
-        }
-        //pagination
-        $total = $query->count();
-        if (!empty($limit) && !empty($page)) {
-            $offset = ($page - 1) * $limit;
-
-            $query->limit($limit)->offset($offset);
-        }
-        $stringLikeSlug = '%' . $slug . '%';
-        $products = $query
-            ->where('categories.slug', 'like', $stringLikeSlug)
+                "products.total "
+            )
+            ->orderByRaw($orderBy)
             ->get();
-        $products->map(function ($item) {
-            $dto = new ProductDTO($item);
-            return $dto->formatData();
-        });
+
+
         return [
-            'products' => $products,
-            'total' => $total,
+            'data' => $products,
+
         ];
 
     }
-
 
 
     public function has(string $name)

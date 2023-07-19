@@ -25,4 +25,13 @@ class DashboardAdminController extends Controller
 
         return $this->service->getRevenue($data);
     }
+
+    public function getHotProducts(Request $request)
+    {
+        $data = [
+            'order_by' => $request['order_by'] ?? 'total',
+        ];
+
+        return $this->service->getHotProducts($data);
+    }
 }

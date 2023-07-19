@@ -91,12 +91,13 @@ class OrderRepository extends BaseRepository
         ];
     }
 
+
+
     public function getProductById($id)
     {
-        $product = Product::query()
-            ->find($id);
+        $product = $this->find($id);
         if ($product) {
-            $data = new ProductDTO($product);
+            $data = new OrderDTO($product);
             return $data->formatDataDetailProduct();
         }
 

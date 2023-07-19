@@ -22,6 +22,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/user', \App\Http\Controllers\Admin\UserAdminController::class);
         Route::apiResource('/tag', \App\Http\Controllers\Admin\TagController::class);
         Route::get('/revenue', [\App\Http\Controllers\Admin\DashboardAdminController::class,'getRevenue']);
+        Route::get('/hot_products', [\App\Http\Controllers\Admin\DashboardAdminController::class,'getHotProducts']);
     });
 
 });
