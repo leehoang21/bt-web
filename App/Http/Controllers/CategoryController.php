@@ -19,6 +19,8 @@ class CategoryController extends Controller
         $this->service = $service;
     }
 
+
+
     public function index(Request $request)
     {
         $page = (int)$request->page;
@@ -29,5 +31,15 @@ class CategoryController extends Controller
             'search_fields' => $request['search_fields']
         ];
         return $this->service->getAll($data);
+    }
+
+    public function getByCategory($slug, Request $request)
+    {
+
+        $data = [
+            'name' => $request->name,
+
+        ];
+        return $this->service->getProductBySlugCategory($slug, $data);
     }
 }

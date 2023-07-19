@@ -44,11 +44,7 @@ class ProductService
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 
-    public function getProductBySlugCategory($slug,$data) {
-        $products = $this->repository->getProductBySlugCategory($slug,$data);
 
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess($products['products']);
-    }
 
 
 

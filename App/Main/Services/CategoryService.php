@@ -34,6 +34,12 @@ class CategoryService
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($result['data'], $paginate);
     }
 
+    public function getProductBySlugCategory($slug,$data) {
+        $products = $this->repository->getProductBySlugCategory($slug,$data);
+
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($products['data']);
+    }
+
     public function getById($id) {
         $data = $this->repository->getById($id);
         if($data){

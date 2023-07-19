@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOderRequest;
-use App\Http\Requests\OderRequest;
 use App\Main\Config\AppConst;
 use App\Main\Services\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -42,5 +42,7 @@ class OrderController extends Controller
         ];
         return $this->service->save($data);
     }
+
+
 
 }

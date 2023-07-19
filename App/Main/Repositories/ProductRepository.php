@@ -101,36 +101,7 @@ class ProductRepository extends BaseRepository
         ];
     }
 
-    public function getProductBySlugCategory($slug, $params)
-    {
-        $query = Category::query()
-            ->with([
-                'products:id,name,slug,description,short_description,price',
-                'products.images:id,url',
-                'products.orders:id,id_user',
-                'products.orders.user:id,name,email,phone',
-                'products.tags:id,name',
-            ]);
 
-        //search
-        if (!empty($params['name']) && is_string($params['name'])) {
-            $stringLike = '%' . $params['name'] . '%';
-            $query->where('name', 'like', $stringLike);
-
-        }
-
-        $products = $query
-            ->where('slug', '=', $slug)
-            ->limit(1)
-            ->get();
-
-
-        return [
-            'products' => $products,
-
-        ];
-
-    }
 
     public function getProductBySlug($slug)
     {

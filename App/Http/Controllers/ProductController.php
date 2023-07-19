@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductFormRequest;
 use App\Main\Config\AppConst;
-use App\Main\Helpers\Response;
 use App\Main\Services\ImageProductService;
 use App\Main\Services\ProductService;
 use App\Main\Services\ProductTagService;
@@ -48,14 +45,5 @@ class ProductController extends Controller
         return $this->productService->getBySlug($slug);
     }
 
-    public function getByCategory($slug, Request $request)
-    {
-        $page = (int)$request->page;
-        $data = [
 
-            'name' => $request->name,
-
-        ];
-        return $this->productService->getProductBySlugCategory($slug,$data);
-    }
 }

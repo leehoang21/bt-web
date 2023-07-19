@@ -21,7 +21,7 @@ Route::post('/auth/forgot_password', [AuthController::class,'forgotPassword']);
 Route::get('/category', [CategoryController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);
 Route::get('/product', [ProductController::class,'index']);
-Route::get('/product_by_category/{slug}', [ProductController::class,'getByCategory']);
+Route::get('/product_by_category/{slug}', [CategoryController::class,'getByCategory']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
