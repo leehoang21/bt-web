@@ -19,32 +19,27 @@ class TagRepository extends BaseRepository
         $query = Tag::query();
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
-        if (!empty($params['key_word']) && is_string($params['key_word'])) {
-            $stringLike = '%' . $params['key_word'] . '%';
-            $query->where('content', 'like', $stringLike);
 
-        }
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
-
+        $whereRaw = [];
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
 
-                if ($searchFields[$i] == 'name') {
-
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'content' || $searchFields[$i] == 'slug' ) {
                     $stringLike = '%' . $keyword[$i] . '%';
-
-                    $query->where($searchFields[$i], 'like', $stringLike);
-                }else {
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
+                }  else {
                     return [
                         'message' => 'search field not found',
                         'total' => 0,
                         'data' => [],
-
                     ];
                 }
         }
+        if (!empty($whereRaw))
+            $query->whereRaw(implode(' and ', $whereRaw));
         //pagination
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
@@ -63,6 +58,7 @@ class TagRepository extends BaseRepository
         return [
             'data' => $data,
             'total' => $total,
+            'message' => 'success',
         ];
     }
 

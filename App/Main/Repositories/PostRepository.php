@@ -20,16 +20,14 @@ class PostRepository extends BaseRepository
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
-
+        $whereRaw = [];
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
 
-                if ($searchFields[$i] == 'title' || $searchFields[$i] == 'slug' || $searchFields[$i] == 'content') {
-
+                if ($searchFields[$i] == 'title' || $searchFields[$i] == 'content' || $searchFields[$i] == 'slug' ) {
                     $stringLike = '%' . $keyword[$i] . '%';
-
-                    $query->where($searchFields[$i], 'like', $stringLike);
-                }else {
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
+                }  else {
                     return [
                         'message' => 'search field not found',
                         'total' => 0,
@@ -37,6 +35,8 @@ class PostRepository extends BaseRepository
                     ];
                 }
         }
+        if (!empty($whereRaw))
+            $query->whereRaw(implode(' and ', $whereRaw));
 
         //pagination
         $page = $params['page'] ?? null;

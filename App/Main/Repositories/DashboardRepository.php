@@ -16,12 +16,14 @@ class DashboardRepository extends BaseRepository
     {
         $query = Product::query();
 
-        $select = "SUM(order_details.quantity*products.price) as total_price,day(order_details.updated_at) as day,month(order_details.updated_at) as month, year(order_details.updated_at) as year";
+        $select = "SUM(order_details.quantity*products.price) as total_price,month(order_details.updated_at) as month, year(order_details.updated_at) as year";
         $products = $query
             ->Join('order_details', 'products.id', '=', 'order_details.id_product')
+            ->join('orders', 'orders.id', '=', 'order_details.id_order')
             ->selectRaw($select)
-            ->groupByRaw('month(order_details.updated_at),day(order_details.updated_at),year(order_details.updated_at)')
-            ->orderByRaw("month(order_details.updated_at), day(order_details.updated_at),year(order_details.updated_at)")
+            ->groupByRaw("orders.status,".'month(order_details.updated_at),year(order_details.updated_at)')
+            ->orderByRaw("month(order_details.updated_at),year(order_details.updated_at)")
+            ->having('orders.status', '=', 1)
             ->get();
 
 
@@ -59,6 +61,7 @@ class DashboardRepository extends BaseRepository
 
         $products = $query
             ->leftJoin('order_details', 'products.id', '=', 'order_details.id_product')
+
             ->selectRaw($select)
             ->with([
                 'categories:id,name,slug',
@@ -80,6 +83,8 @@ class DashboardRepository extends BaseRepository
                 "products.total "
             )
             ->orderByRaw($orderBy)
+            ->limit(10)
+
             ->get();
 
 

@@ -28,10 +28,9 @@ class OrderAdminController extends Controller
         $data = [
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
-            'start' => $request->start,
-            'end' => $request->end,
-            'status' => $request->status,
-            'order_by' => $request->order_by,
+
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
         ];
         return $this->service->getAll($data);
     }

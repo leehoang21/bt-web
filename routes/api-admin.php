@@ -14,7 +14,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/update_image/{id}', [\App\Http\Controllers\Admin\ImageAdminController::class,'update']);
         Route::apiResource('/product', ProductAdminController::class);
         Route::apiResource('/post', PostAdminController::class);
-        Route::apiResource('/advisory', \App\Http\Controllers\Admin\AdvisoryController::class);
+        Route::apiResource('/advisory', \App\Http\Controllers\Admin\AdvisoryAdminController::class);
         Route::apiResource('/setting', \App\Http\Controllers\Admin\SettingAdminController::class);
         Route::apiResource('/category', \App\Http\Controllers\Admin\CategoryAdminController::class);
         Route::apiResource('/image', \App\Http\Controllers\Admin\ImageAdminController::class);

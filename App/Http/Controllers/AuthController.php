@@ -54,6 +54,7 @@ class AuthController extends Controller
     public function sendVerify(SendVerifyRequest $request)
     {
         $email = $request->email;
+
         return $this->authService->sendOtp($email);
     }
 

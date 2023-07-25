@@ -51,10 +51,10 @@ class SettingAdminController extends Controller
         return $this->service->getById($id);
     }
 
-    public function update(SettingFormRequest $request, $id)
+    public function update(SettingFormRequest $request)
     {
         $data = [
-            'id' => $id,
+
             'data' =>
                 [
                     'content' => $request['content'],
@@ -62,8 +62,8 @@ class SettingAdminController extends Controller
                 ],
         ];
 
-        $result = $this->service->save($data);
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess("",message: true,);
+        return $this->service->save($data);
+
     }
 
     public function destroy($id)

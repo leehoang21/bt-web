@@ -4,9 +4,7 @@ namespace App\Main\Repositories;
 
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\ProductDTO;
-use App\Models\Category;
 use App\Models\Product;
-use function PHPUnit\Framework\isEmpty;
 
 class ProductRepository extends BaseRepository
 {
@@ -24,6 +22,8 @@ class ProductRepository extends BaseRepository
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+        $whereRaw = [];
+
 
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
@@ -32,19 +32,22 @@ class ProductRepository extends BaseRepository
                     $searchFields[$i] = 'products.' . $searchFields[$i];
                     $stringLike = '%' . $keyword[$i] . '%';
 
-                    $query->where($searchFields[$i], 'like', $stringLike);
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
+                } else if ($searchFields[$i] == 'price_from' && $searchFields[$i] == 'price_to') {
+                    $whereRaw[$i] = '(between products.price >= ' . $keyword[$i] . ' and products.price <= ' . $keyword[$i] . ')';
                 } else if ($searchFields[$i] == 'price_from') {
-                    $query->where('products.price', '>=', $keyword[$i]);
+                    $whereRaw[$i] = 'products.price >= ' . $keyword[$i];
 
                 } else if ($searchFields[$i] == 'price_to') {
-                    $query->where('products.price', '<=', $keyword[$i]);
+                    $whereRaw[$i] = 'products.price <= ' . $keyword[$i];
                 } else if ($searchFields[$i] == 'status') {
-
                     if ($keyword[$i] == '1') {
-                        $query->where('products.total', '>', 0);
+
+                        $whereRaw[$i] = 'products.total > 0';
                     }
                     if ($keyword[$i] == '2') {
-                        $query->where('products.total', '<=', 0);
+
+                        $whereRaw[$i] = '(products.total < 1 or products.total is null)';
                     }
 
                 } else {
@@ -55,6 +58,10 @@ class ProductRepository extends BaseRepository
                     ];
                 }
         }
+        if (!empty($whereRaw))
+
+            $query->whereRaw(implode(' and ', $whereRaw));
+
         //pagination
         $total = $query->count();
         if (!empty($limit) && !empty($page)) {
@@ -102,12 +109,11 @@ class ProductRepository extends BaseRepository
     }
 
 
-
     public function getProductBySlug($slug)
     {
 
         $product = Product::query()
-            ->where('slug','=', $slug)
+            ->where('slug', '=', $slug)
             ->with([
                 'categories:id,name,slug',
                 'images:id,url',

@@ -10,7 +10,7 @@ use App\Main\Services\AdvisoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class AdvisoryController extends Controller
+class AdvisoryAdminController extends Controller
 {
     protected $service;
 
@@ -43,7 +43,7 @@ class AdvisoryController extends Controller
                     'email' => $request->email,
                     'phone' => $request->phone,
                     'content' => $request['content'],
-                    'status'=>0,
+                    'status'=>$request['status'],
                 ],
 
         ];
