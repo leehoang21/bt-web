@@ -4,9 +4,9 @@ namespace App\Main\Repositories;
 
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\OrderDTO;
-use App\Main\DTO\ProductDTO;
 use App\Models\Order;
-use App\Models\Product;
+use mysql_xdevapi\Collection;
+use function PHPUnit\Framework\isEmpty;
 
 class OrderRepository extends BaseRepository
 {
@@ -22,52 +22,26 @@ class OrderRepository extends BaseRepository
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;
 
-        //statistic
-        $start = $params['start'] ?? null;
-        $end = $params['end'] ?? null;
-        $status = $params['status'] ?? null;
-        if (!empty($start) && !empty($end)) {
-            $query->whereBetween('orders.created_at', [$start, $end]);
+        //search
+        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
+        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+        $name = null;
+
+        if (!empty($keyword) && !empty($searchFields)) {
+            for ($i = 0; $i < count($searchFields); $i++)
+
+                if ($searchFields[$i] == 'name') {
+                    $name = $keyword[$i];
+                } else if ($searchFields[$i] == 'status') {
+                    $query->where('orders.status', $keyword[$i]);
+                } else {
+                    return [
+                        'message' => 'search field not found',
+                        'total' => 0,
+                        'orders' => [],
+                    ];
+                }
         }
-        if ($status != null) {
-            error_log($status);
-            $query->where('orders.status', $status);
-        }
-
-        //order by
-        $order = [
-            'total' => 'SUM(order_details.quantity) ',
-            'total_price' => 'SUM(products.price*order_details.quantity) ',
-            'status' => 'orders.status ',
-        ];
-
-        $orderBy = $params['order_by'] ?? null;
-
-        if (!empty($orderBy)) {
-            $orderBy = explode(',', $orderBy);
-            $order = $order[$orderBy[0]];
-            $orderBy = $order . $orderBy[1];
-
-        } else {
-            $orderBy = 'orders.id';
-        }
-        //select
-        $select = "orders.id,orders.id_user,orders.status,SUM(order_details.quantity) as total,SUM(products.price*order_details.quantity) as total_price,orders.created_at,orders.updated_at";
-
-         $query->with([
-
-            'user:id,name,email,phone',
-            'user.avatar:id,url',
-            'products:id,name,price',
-            'orderDetails:id_order,id_product,quantity'
-
-
-        ])->selectRaw(
-            $select
-        )->leftJoin('order_details', 'orders.id', '=', 'order_details.id_order')
-            ->leftJoin('products', 'products.id', '=', 'order_details.id_product')
-            ->groupByRaw('orders.id_user,orders.status,orders.id,orders.created_at,orders.updated_at')
-            ->orderByRaw($orderBy);
 
 
         $total = $query->get()->count();
@@ -77,20 +51,40 @@ class OrderRepository extends BaseRepository
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
         }
-        $order = $query->get();
 
-        $order->map(function ($item) {
-            $dto = new OrderDTO($item);
+        //get
+        $order = $query
+            ->join('users', 'orders.id_user', '=', 'users.id')
+            ->with(
+                [
+                    'user:id,name,phone,email',
+                    'user.avatar:id,url',
+                    'orderDetails:id_order,id_product,quantity',
+                    'products:id,name,price,total,description,slug,short_description,serial_number,warranty_period',
 
-            return $dto->formatData();
-        });
+                ]
+            )
+            ->select(
+                'orders.id',
+                'orders.id_user',
+                'orders.status',
+                'orders.created_at',
+                'orders.updated_at',
+                'users.name as name_user',
+
+
+            )
+            ->where('users.name', 'like', '%' . $name . '%')
+            ->get();
+
+
 
         return [
             'orders' => $order,
             'total' => $total,
+            'message' => 'success',
         ];
     }
-
 
 
     public function getProductById($id)

@@ -21,14 +21,16 @@ Route::post('/auth/forgot_password', [AuthController::class,'forgotPassword']);
 Route::get('/category', [CategoryController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);
 Route::get('/product', [ProductController::class,'index']);
+Route::post('/advisory', [\App\Http\Controllers\AdvisoryController::class,'store']);
 Route::get('/product_by_category/{slug}', [CategoryController::class,'getByCategory']);
+Route::post('/auth/verify_email', [AuthController::class,'verifyEmail']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/profile', [UserController::class,'show']);
     Route::post('/profile', [UserController::class,'store']);
     Route::post('/update_avatar', [ImageController::class,'updateAvatar']);
-    Route::post('/auth/verify_email', [AuthController::class,'verifyEmail']);
+
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
     Route::post('create_order', [OrderController::class,'store']);
 });

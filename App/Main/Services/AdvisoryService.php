@@ -68,16 +68,16 @@ class AdvisoryService
 
     private function updateData($data) {
         $advisory = $this->repository->findOrFail($data['id']);
-        if( !isEmpty($data['data']['slug'])){
+        if( !isEmpty($data['data']['content'])){
             $advisory->content = $data['data']['content'];
         }
         if( !isEmpty($data['data']['name'])){
             $advisory->name = $data['data']['name'];
         }
-        if( !isEmpty($data['data']['description'])){
+        if( !isEmpty($data['data']['email'])){
             $advisory->email = $data['data']['email'];
         }
-        if( !isEmpty($data['data']['image'])){
+        if( !isEmpty($data['data']['phone'])){
             $advisory->phone = $data['data']['phone'];
         }
         if( !isEmpty($data['data']['status'])){

@@ -70,6 +70,17 @@ class SettingRepository extends BaseRepository
         ];
     }
 
+    public  function checkExist($key,$value){
+        $data = Setting::query()
+            ->where($key, $value)
+            ->first();
+        if ($data == null) {
+            return false;
+        }
+        return true;
+    }
+
+
     public function getById($id)
     {
         $data = Setting::query()

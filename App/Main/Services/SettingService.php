@@ -46,10 +46,11 @@ class SettingService
         DB::beginTransaction();
         try{
 
-            if(empty($data['id'])) {
-                $result = $this->createData($data);
-            } else {
+            if($this->repository->checkExist('type', $data['data']['type'])){
                 $result = $this->updateData($data);
+            } else {
+                $result = $this->createData($data);
+
             }
             DB::commit();
         } catch (Throwable $e) {
@@ -67,7 +68,7 @@ class SettingService
 
     private function updateData($data) {
 
-        return $this->repository->update('id', $data['id'], $data['data']);
+        return $this->repository->update('type', $data['data']['type'], $data['data']);
     }
 
     public function delete($id) {

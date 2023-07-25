@@ -21,6 +21,8 @@ class CategoryRepository extends BaseRepository
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+        $whereRaw = [];
+        error_log($params['keyword']);
 
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
@@ -29,7 +31,7 @@ class CategoryRepository extends BaseRepository
 
                     $stringLike = '%' . $keyword[$i] . '%';
 
-                    $query->where($searchFields[$i], 'like', $stringLike);
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
                 }else {
                     return [
                         'message' => 'search field not found',
@@ -40,7 +42,10 @@ class CategoryRepository extends BaseRepository
                 }
         }
 
+        if (!empty($whereRaw))
+            $query->whereRaw(implode(' and ', $whereRaw));
         $total = $query->count();
+
         //pagination
         $page = $params['page'] ?? null;
         $limit = $params['limit'] ?? null;

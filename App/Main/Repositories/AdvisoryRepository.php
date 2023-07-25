@@ -6,7 +6,7 @@ use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\AdvisoryDTO;
 
 use App\Models\Advisory;
-
+use function PHPUnit\Framework\isEmpty;
 
 
 class AdvisoryRepository extends BaseRepository
@@ -22,24 +22,29 @@ class AdvisoryRepository extends BaseRepository
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+        $whereRaw = [];
 
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
 
-                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'phone' || $searchFields[$i] == 'status' ) {
-
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'phone') {
                     $stringLike = '%' . $keyword[$i] . '%';
-
-                    $query->where($searchFields[$i], 'like', $stringLike);
-                }else {
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
+                } else if ($searchFields[$i] == 'status') {
+                    if(!isEmpty($whereRaw[$i] = 'status =' . $keyword[$i])){
+                        $whereRaw[$i] = 'status =' . $keyword[$i];
+                    }
+                } else {
                     return [
                         'message' => 'search field not found',
                         'total' => 0,
                         'data' => [],
-
                     ];
                 }
         }
+
+        if (!empty($whereRaw))
+            $query->whereRaw(implode(' and ', $whereRaw));
 
         $total = $query->count();
         //pagination

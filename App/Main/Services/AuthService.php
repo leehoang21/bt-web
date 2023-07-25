@@ -86,6 +86,7 @@ class AuthService
 
     public function sendOtp($email)
     {
+
         $otp = $this->generateOtp();
         $data = [
             'email' => $email,
@@ -96,7 +97,8 @@ class AuthService
         $this->otpRepository->create($data);
 
         Mail::raw((string)$otp, function ($message) use ($email) {
-            $message->to($email)->subject('Verify OTP');
+            $message->to($email)->subject('Verify OTP')
+               ;
 
         });
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Send email success', Response::HTTP_CODE_SUCCESS);
