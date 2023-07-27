@@ -24,6 +24,7 @@ Route::get('/product', [ProductController::class,'index']);
 Route::post('/advisory', [\App\Http\Controllers\AdvisoryController::class,'store']);
 Route::get('/product_by_category/{slug}', [CategoryController::class,'getByCategory']);
 Route::post('/auth/verify_email', [AuthController::class,'verifyEmail']);
+Route::post('create_order', [OrderController::class,'store']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -32,6 +33,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/update_avatar', [ImageController::class,'updateAvatar']);
 
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
-    Route::post('create_order', [OrderController::class,'store']);
+
 });
 require __DIR__ . '/api-admin.php';

@@ -41,6 +41,7 @@ class OrderAdminController extends Controller
         $order = [
             'id_user' => $request->id_user,
             'status' => AppConst::ORDER_STATUS_PENDING,
+            'address' => $request->address,
         ];
 
         $arrOrder = [];
@@ -75,6 +76,7 @@ class OrderAdminController extends Controller
         $data = [
             'id' => $id,
             'status' => $request->status,
+            'address' => $request->address,
         ];
         return $this->service->save($data);
     }

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
+
     ];
 
     /**
@@ -49,5 +50,10 @@ class User extends Authenticatable
     public function avatar()
     {
         return $this->belongsToMany(Image::class, 'avatars', 'id_user', 'id_image');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class, 'id_user');
     }
 }
