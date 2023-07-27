@@ -17,6 +17,7 @@ class OderRequest extends BaseRequest
         $status = 'required:status';
         return [
             'status' => $status,
+            'address' => 'required|string',
         ];
     }
 

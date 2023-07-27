@@ -6,6 +6,7 @@ use App\Http\Requests\CreateOderRequest;
 use App\Main\Config\AppConst;
 use App\Main\Services\OrderService;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class OrderController extends Controller
 {
@@ -20,9 +21,11 @@ class OrderController extends Controller
 
     public function store(CreateOderRequest $request)
     {
+
         $order = [
-            'id_user' => auth()->user()->id,
+            'id_user' => isEmpty(auth()->user()) ? -1 : auth()->user()->id,
             'status' => AppConst::ORDER_STATUS_PENDING,
+            'address' => $request->address,
         ];
         $arrOrder = [];
         $orders = $request->orders;

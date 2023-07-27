@@ -17,6 +17,7 @@ class CreateOderRequest extends BaseRequest
             'orders' => 'required|array',
             'orders.*.id_product' => 'required|integer',
             'orders.*.total' => 'required|integer',
+            'address' => 'required|string',
         ];
     }
 

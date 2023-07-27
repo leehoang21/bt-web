@@ -85,6 +85,7 @@ class OrderService
         return  [
             'id' => $result->id,
             'status' => $result->status,
+            'address' => $result->address,
             'created_at' => $result->created_at,
             'updated_at' => $result->updated_at,
             'products' => $products,
