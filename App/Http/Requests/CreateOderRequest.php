@@ -14,8 +14,9 @@ class CreateOderRequest extends BaseRequest
     public function rules()
     {
         return [
-            'products' => 'required|array',
-            'array_total' => 'required|array',
+            'orders' => 'required|array',
+            'orders.*.id_product' => 'required|integer',
+            'orders.*.total' => 'required|integer',
         ];
     }
 
