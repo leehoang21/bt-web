@@ -24,18 +24,20 @@ class OrderController extends Controller
             'id_user' => auth()->user()->id,
             'status' => AppConst::ORDER_STATUS_PENDING,
         ];
-        $products = $request->products;
         $arrOrder = [];
-        for ($i = 0; $i < count($products); $i++) {
+        $orders = $request->orders;
+
+        for ($i = 0; $i < count($orders); $i++) {
             $orderDetail = [
-                'id_product' => $products[$i],
-                'quantity' => $request->array_total[$i],
+                'id_product' => $orders[$i]['id_product'],
+                'quantity' => $orders[$i]['total'],
             ];
             $arrOrder[$i] = [
                 'order' => $order,
                 'order_detail' => $orderDetail,
             ];
         }
+
         $data = [
             'orders' => $arrOrder,
 
