@@ -19,6 +19,19 @@ class OrderController extends Controller
         $this->service = $orderService;
     }
 
+    public function index(Request $request)
+    {
+        $page = (int)$request->page;
+        $data = [
+            'page' => !empty($page) ? abs($page) : 1,
+            'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
+
+            'keyword' => $request->keyword,
+            'search_fields' => $request['search_fields']
+        ];
+        return $this->service->getAll($data);
+    }
+
     public function store(CreateOderRequest $request)
     {
 
