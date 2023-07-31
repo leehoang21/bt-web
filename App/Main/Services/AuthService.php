@@ -8,6 +8,7 @@ use App\Main\Repositories\OtpRepository;
 use App\Main\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use function PHPUnit\Framework\isEmpty;
 
 class AuthService
 {
@@ -137,15 +138,22 @@ class AuthService
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success', Response::HTTP_CODE_SUCCESS);
     }
 
-    public function changePass($email,$pass,$newPass)
+    public function changePass($email,$newPass,$pass =null)
     {
+
         $user = $this->userRepository->findOne('email', $email);
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
         }
-        if (!Hash::check($pass, $user->password)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+        if(!isEmpty($pass)){
+
+            if ( !Hash::check($pass, $user->password)) {
+                return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+            }
+        }else{
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess('Password incorrect', Response::HTTP_CODE_SUCCESS);
         }
+
         $user->password = Hash::make($newPass);
         $user->save();
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Change password success', Response::HTTP_CODE_SUCCESS);

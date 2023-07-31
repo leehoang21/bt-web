@@ -16,12 +16,12 @@ class Tag extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'id_tag');
+        return $this->belongsToMany(Product::class, 'product_tags', 'id_tag', 'id_product');
     }
 
     public function posts()
     {
-        return $this->hasMany(Post::class, 'id_tag');
+        return $this->belongsToMany(Post::class, 'tag_posts', 'id_tag', 'id_post');
     }
 
 }

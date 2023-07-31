@@ -5,6 +5,7 @@ namespace App\Main\Repositories;
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\TagDTO;
 use App\Models\Tag;
+use function PHPUnit\Framework\isEmpty;
 
 
 class TagRepository extends BaseRepository
@@ -21,16 +22,16 @@ class TagRepository extends BaseRepository
         $limit = $params['limit'] ?? null;
 
         //search
-        $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
-        $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
+        $keyword = isEmpty($params['keyword']) ? null : explode(',', $params['keyword']);
+        $searchFields = isEmpty($params['search_fields']) ? null : explode(',', $params['search_fields']);
         $whereRaw = [];
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
 
-                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'content' || $searchFields[$i] == 'slug' ) {
+                if ($searchFields[$i] == 'name' || $searchFields[$i] == 'content' || $searchFields[$i] == 'slug') {
                     $stringLike = '%' . $keyword[$i] . '%';
                     $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
-                }  else {
+                } else {
                     return [
                         'message' => 'search field not found',
                         'total' => 0,
@@ -42,11 +43,20 @@ class TagRepository extends BaseRepository
             $query->whereRaw(implode(' and ', $whereRaw));
         //pagination
         $total = $query->count();
+
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
             $query->limit($limit)->offset($offset);
         }
-        $query->get();
+        $query->
+        with(
+            [
+                'posts:id,title,content',
+                'posts.images:id,url',
+                'products:id,name,price',
+            ]
+        )->
+        get();
         $data = $query
             ->orderBy($orderBy)
             ->get();
@@ -65,7 +75,6 @@ class TagRepository extends BaseRepository
     public function getById($id)
     {
         $data = Tag::query()
-
             ->find($id);
         $dto = new TagDTO($data);
         return $dto->formatData();
