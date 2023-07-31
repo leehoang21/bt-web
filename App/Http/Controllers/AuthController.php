@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     protected $authService;
-    protected  UserService $userService;
+    protected UserService $userService;
 
     public function __construct(
         AuthService $authService,
@@ -78,7 +78,7 @@ class AuthController extends Controller
     public function forgotPassword(ForgotPasswordRequest $request)
     {
         $error = $this->verify($request);
-        $email = auth()->user()->email;
+        $email = $request->email;
         if (empty($error)) {
             return $this->authService->changePass($email, $request->password);
         } else {
@@ -90,7 +90,8 @@ class AuthController extends Controller
     {
         $email = auth()->user()->email;
         $newPassword = $request['new_password'];
-        return $this->authService->changePass($email, $request->password, $newPassword);
+        $pass = $request['password'];
+        return $this->authService->changePass($email, $newPassword, $pass);
     }
 
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 use Illuminate\Support\Str;
 
-class ForgotPasswordRequest extends BaseRequest
+class AddressFormRequest extends BaseRequest
 {
 
     /**
@@ -13,10 +13,11 @@ class ForgotPasswordRequest extends BaseRequest
      */
     public function rules()
     {
+        $old_address = $this->method() == 'POST' ? 'nullable|string' : 'required|string';
         return [
-            'password' => 'required|min:6',
-            'otp' => 'required',
-            'email' => 'required|email',
+            'address'=> 'required|string',
+            'old_address' => $old_address,
+
         ];
     }
 

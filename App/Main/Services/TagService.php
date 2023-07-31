@@ -6,6 +6,7 @@ use App\Main\Repositories\TagRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use function PHPUnit\Framework\isEmpty;
 
 class TagService
 {
@@ -20,8 +21,11 @@ class TagService
 
     public function getAll( $data) {
         $result = $this->repository->getAll($data);
+        if(isEmpty($data['limit'])){
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess($result['data']);
+        }
         $total = $result['total'];
-        $limit = $data['limit'];
+        $limit = $data['limit'] ;
         $page = $data['page'];
         $paginate = (new \App\Main\Helpers\Response)->paginate($total, $limit, $page);
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($result['data'], $paginate);
