@@ -18,8 +18,8 @@ class AddressRepository extends BaseRepository
     public function getById($id)
     {
         $data = Address::query()
-            ->where('id_user', $id)
-            ->get();
+            ->find($id)
+            ->first();
         return $data;
     }
 

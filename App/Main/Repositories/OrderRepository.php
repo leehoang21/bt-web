@@ -5,7 +5,6 @@ namespace App\Main\Repositories;
 use App\Main\BaseResponse\BaseRepository;
 use App\Main\DTO\OrderDTO;
 use App\Models\Order;
-use mysql_xdevapi\Collection;
 use function PHPUnit\Framework\isEmpty;
 
 class OrderRepository extends BaseRepository
@@ -19,33 +18,41 @@ class OrderRepository extends BaseRepository
     {
         $query = Order::query();
 
-        $page = $params['page'] ?? null;
-        $limit = $params['limit'] ?? null;
-
         //search
         $keyword = $params['keyword'] == null ? null : explode(',', $params['keyword']);
         $searchFields = $params['search_fields'] == null ? null : explode(',', $params['search_fields']);
-        $name = null;
+        $whereRaw = [];
+
 
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
 
                 if ($searchFields[$i] == 'name') {
-                    $name = $keyword[$i];
+                    $searchFields[$i] = 'users.name';
+                    $stringLike = '%' . $keyword[$i] . '%';
+
+                    $whereRaw[$i] = $searchFields[$i] . ' like ' . "'$stringLike'";
                 } else if ($searchFields[$i] == 'status') {
-                    $query->where('orders.status', $keyword[$i]);
-                } else {
-                    return [
-                        'message' => 'search field not found',
-                        'total' => 0,
-                        'orders' => [],
-                    ];
+                    $searchFields[$i] = 'orders.status';
+                    $stringLike = $keyword[$i];
+
+                    $whereRaw[$i] = $searchFields[$i] . ' = ' . "'$stringLike'";
+                } else if ($searchFields[$i] == 'id_user') {
+                    $searchFields[$i] = 'orders.id_user';
+                    $stringLike = $keyword[$i];
+
+                    $whereRaw[$i] = $searchFields[$i] . ' = ' . "'$stringLike'";
                 }
         }
 
+        if (!empty($whereRaw))
+
+            $query->whereRaw(implode(' and ', $whereRaw));
 
         $total = $query->get()->count();
         //pagination
+        $page = $params['page'] ?? null;
+        $limit = $params['limit'] ?? null;
 
         if (!empty($limit) && !empty($page)) {
             $offset = ($page - 1) * $limit;
@@ -57,8 +64,10 @@ class OrderRepository extends BaseRepository
             ->join('users', 'orders.id_user', '=', 'users.id')
             ->with(
                 [
+                    'address:id,full_name,phone,address,id_user',
                     'user:id,name,phone,email',
                     'user.avatar:id,url',
+
                     'orderDetails:id_order,id_product,quantity',
                     'products:id,name,price,total,description,slug,short_description,serial_number,warranty_period',
 
@@ -71,12 +80,11 @@ class OrderRepository extends BaseRepository
                 'orders.created_at',
                 'orders.updated_at',
                 'users.name as name_user',
+                'orders.id_address',
 
 
             )
-            ->where('users.name', 'like', '%' . $name . '%')
             ->get();
-
 
 
         return [

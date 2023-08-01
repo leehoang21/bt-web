@@ -27,17 +27,18 @@ Route::get('/product/{slug}', [ProductController::class,'show']);
 Route::get('/product', [ProductController::class,'index']);
 Route::post('/advisory', [\App\Http\Controllers\AdvisoryController::class,'store']);
 Route::get('/product_by_category/{slug}', [CategoryController::class,'getByCategory']);
-Route::post('create_order', [OrderController::class,'store']);
+
 Route::get('/tag', [\App\Http\Controllers\TagController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-
+    Route::post('create_order', [OrderController::class,'store']);
+    Route::get('order', [OrderController::class,'index']);
     Route::get('/profile', [UserController::class,'show']);
     Route::post('/profile', [UserController::class,'store']);
     Route::post('/update_avatar', [ImageController::class,'updateAvatar']);
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
-    Route::post('/create_address', [AddressController::class,'store']);
-    Route::patch('/update_address', [AddressController::class,'update']);
+    Route::post('/address', [AddressController::class,'store']);
+    Route::patch('/address/{id}', [AddressController::class,'update']);
 
 });
 require __DIR__ . '/api-admin.php';

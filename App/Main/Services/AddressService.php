@@ -34,7 +34,7 @@ class AddressService
         DB::beginTransaction();
         try {
 
-            if (empty($data['old_address'])) {
+            if (empty($data['id'])) {
                 $result = $this->createData($data);
             } else {
 
@@ -62,12 +62,10 @@ class AddressService
     {
         $query=   $this->repository->update(
             [
-                'id_user',
-                'address',
+                'id',
             ],
             [
-                $data['data']['id_user'],
-                $data['old_address'],
+                $data['id'],
             ],
             $data['data'],
         );

@@ -11,13 +11,18 @@ class Order extends Model
     protected $fillable = [
         'id_user',
         'status',
-        'address'
+        'id_address'
 
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public  function address()
+    {
+        return $this->hasOne(Address::class, 'id','id_address');
     }
 
     public function avatar()
