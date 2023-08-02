@@ -29,6 +29,7 @@ class UserController extends Controller
                     'name' => $request['name'],
                     'email' => $request['email'],
                     'phone' => $request['phone'],
+                    'status'=>null,
                 ],
             'id' => auth()->user()->id,
         ];
