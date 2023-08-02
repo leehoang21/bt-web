@@ -2,7 +2,6 @@
 
 namespace App\Main\Services;
 
-use App\Main\Helpers\Response;
 use App\Main\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -21,7 +20,8 @@ class UserService
 
     }
 
-    public  function  getEmail(){
+    public function getEmail()
+    {
         return $this->repository->getEmail();
     }
 
@@ -29,7 +29,7 @@ class UserService
     {
         $result = $this->repository->getAll($data);
         $message = $result['message'];
-        if(isEmpty($message) && $message != 'success'){
+        if (isEmpty($message) && $message != 'success') {
             return (new \App\Main\Helpers\Response)->responseJsonFail($message);
         }
         $total = $result['total'];
@@ -58,7 +58,6 @@ class UserService
 
                 $result = $this->createData($data);
             } else {
-                error_log('hee');
                 $result = $this->updateData($data);
             }
 
@@ -66,7 +65,7 @@ class UserService
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
-            if($e->getCode() == 23000){
+            if ($e->getCode() == 23000) {
                 return (new \App\Main\Helpers\Response)->responseJsonFail("The email has already been taken. ");
             }
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
@@ -87,7 +86,15 @@ class UserService
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
-        $user->status = $data['data']['status'];
+        foreach ($data['data'] as $key => $value) {
+            if ($key != 'status') {
+                $user->$key = $value;
+            }
+        }
+        $status = $data['data']['status'];
+        if (!isEmpty($status)) {
+            $user->status = $data['data']['status'];
+        }
         $user->save();
         return $user;
     }
@@ -99,7 +106,6 @@ class UserService
                 'id' => $id,
                 'data' => [
                     'status' => 2
-
                 ]
             ]
         );
