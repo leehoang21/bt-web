@@ -13,11 +13,13 @@ class AddressFormRequest extends BaseRequest
      */
     public function rules()
     {
-        $old_address = $this->method() == 'POST' ? 'nullable|string' : 'required|string';
+        $address = $this->method() == 'POST' ? 'nullable|string' : 'required|string';
+        $phone = $this->method() == 'POST' ? 'nullable|string' : 'required|string';
+        $full_name = $this->method() == 'POST' ? 'nullable|string' : 'required|string';
         return [
-            'address'=> 'required|string',
-            'old_address' => $old_address,
-
+            'address'=> $address,
+            'phone' =>$phone,
+            'full_name'=>$full_name,
         ];
     }
 

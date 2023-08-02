@@ -14,12 +14,12 @@ class AuthService
 {
     protected AdminRepository $adminRepository;
     protected OtpRepository $otpRepository;
-    protected  UserRepository $userRepository;
+    protected UserRepository $userRepository;
 
     public function __construct(
         AdminRepository $adminRepository,
         OtpRepository   $otpRepository,
-        UserRepository $userRepository
+        UserRepository  $userRepository
     )
     {
         $this->adminRepository = $adminRepository;
@@ -48,7 +48,7 @@ class AuthService
                 'data' => [
                     'access_token' => $token,
                     'token_type' => 'Bearer',
-                    'user'=>$user,
+                    'user' => $user,
 
                 ],
 
@@ -61,6 +61,7 @@ class AuthService
 
         $user = $this->userRepository->findOne('email', $email);
 
+
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
         }
@@ -69,6 +70,12 @@ class AuthService
         }
 
         $token = $user->createToken('authToken')->plainTextToken;
+        $user = $user->with([
+            'addresses:id_user,address,id'
+        ])
+            ->where('email', '=', $email)
+            ->first();
+
 
         return response(
             [
@@ -76,7 +83,7 @@ class AuthService
                 'data' => [
                     'access_token' => $token,
                     'token_type' => 'Bearer',
-                    'user'=>$user,
+                    'user' => $user,
 
                 ],
 
@@ -98,8 +105,7 @@ class AuthService
         $this->otpRepository->create($data);
 
         Mail::raw((string)$otp, function ($message) use ($email) {
-            $message->to($email)->subject('Verify OTP')
-               ;
+            $message->to($email)->subject('Verify OTP');
 
         });
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Send email success', Response::HTTP_CODE_SUCCESS);
@@ -138,19 +144,19 @@ class AuthService
         return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success', Response::HTTP_CODE_SUCCESS);
     }
 
-    public function changePass($email,$newPass,$pass =null)
+    public function changePass($email, $newPass, $pass = null)
     {
 
         $user = $this->userRepository->findOne('email', $email);
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
         }
-        if(!isEmpty($pass)){
+        if (!isEmpty($pass)) {
 
-            if ( !Hash::check($pass, $user->password)) {
+            if (!Hash::check($pass, $user->password)) {
                 return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
             }
-        }else{
+        } else {
             return (new \App\Main\Helpers\Response)->responseJsonSuccess('Password incorrect', Response::HTTP_CODE_SUCCESS);
         }
 

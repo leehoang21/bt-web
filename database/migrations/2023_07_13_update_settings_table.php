@@ -32,6 +32,10 @@ return new class extends Migration
      */
     public function down()
     {
+        \Illuminate\Support\Facades\DB::update('ALTER TABLE settings ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
 
+        Schema::table('settings', function (Blueprint $table) {
+            $table->dropPrimary('pk_settings');
+        });
     }
 };

@@ -22,12 +22,16 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $page = (int)$request->page;
+        $idUser = auth()->user()->id;
+
+        $searchFields = $request['search_fields'].',id_user';
+        $keyword = $request->keyword.','.$idUser;
+
         $data = [
             'page' => !empty($page) ? abs($page) : 1,
             'limit' => !empty($request->limit) ? (int)$request->limit : AppConst::PAGE_LIMIT,
-
-            'keyword' => $request->keyword,
-            'search_fields' => $request['search_fields']
+            'keyword' => $keyword,
+            'search_fields' => $searchFields,
         ];
         return $this->service->getAll($data);
     }

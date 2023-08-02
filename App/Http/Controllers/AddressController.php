@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\AddressFormRequest;
 use App\Main\Services\AddressService;
 use function PHPUnit\Framework\isEmpty;
 
 class AddressController extends Controller
 {
-    protected  AddressService $userService;
+    protected AddressService $userService;
 
 
     public function __construct(
@@ -26,6 +27,9 @@ class AddressController extends Controller
                 [
                     'address' => $request->address,
                     'id_user' => auth()->user()->id,
+                    'phone' => $request->phone,
+                    'full_name' => $request['full_name'],
+
                 ],
 
         ];
@@ -33,15 +37,19 @@ class AddressController extends Controller
         return $this->userService->save($data);
     }
 
-    public function update(AddressFormRequest $request)
+    public function update(AddressFormRequest $request, int $id)
     {
+
         $data = [
             'data' =>
                 [
                     'address' => $request->address,
                     'id_user' => auth()->user()->id,
+                    'phone' => $request->phone,
+                    'full_name' => $request['full_name'],
+
                 ],
-            'old_address' => "'".$request->old_address."'",
+            'id' => $id,
         ];
 
         return $this->userService->save($data);
