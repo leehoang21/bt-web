@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
@@ -39,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
     Route::post('/address', [AddressController::class,'store']);
     Route::patch('/address/{id}', [AddressController::class,'update']);
+    Route::get('/cart', [CartController::class,'index']);
+    Route::post('/cart', [CartController::class,'store']);
+    Route::delete('/cart/{id}', [CartController::class,'destroy']);
 
 });
 require __DIR__ . '/api-admin.php';
