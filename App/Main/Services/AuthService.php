@@ -71,7 +71,9 @@ class AuthService
 
         $token = $user->createToken('authToken')->plainTextToken;
         $user = $user->with([
-            'addresses:id_user,address,id'
+            'addresses:id_user,address,id',
+            'avatar:url,id',
+
         ])
             ->where('email', '=', $email)
             ->first();

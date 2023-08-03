@@ -12,9 +12,9 @@ class CartRequest extends BaseRequest
      */
     public function rules()
     {
-
+        $id_product = $this->method() == 'POST' ? 'required|exists:products,id' : '';
         return [
-                "id_product" => "required|exists:products,id",
+                "id_product" => $id_product,
                 "total" =>  "required|integer",
         ];
     }

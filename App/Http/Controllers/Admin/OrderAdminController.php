@@ -41,7 +41,7 @@ class OrderAdminController extends Controller
         $order = [
             'id_user' => $request->id_user,
             'status' => AppConst::ORDER_STATUS_PENDING,
-            'address' => $request->address,
+            'id_address' => $request->id_address,
         ];
 
         $arrOrder = [];
