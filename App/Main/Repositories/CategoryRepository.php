@@ -58,6 +58,9 @@ class CategoryRepository extends BaseRepository
             ->with(
                 [
                     'images:id,url',
+                    'products:id,name,slug,description,short_description,price',
+                    'products.images:id,url',
+
                 ]
             )
             ->orderBy($orderBy)

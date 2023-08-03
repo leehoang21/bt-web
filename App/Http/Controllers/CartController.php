@@ -49,5 +49,19 @@ class CartController extends Controller
         return $this->service->save($data);
     }
 
+    public function update(CartRequest $request,int $id)
+    {
+
+        $cart = [
+            'quantity' => $request->total,
+        ];
+        $data = [
+            'data' => $cart,
+            'id' => $id,
+
+        ];
+        return $this->service->save($data);
+    }
+
 
 }

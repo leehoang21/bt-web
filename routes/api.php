@@ -40,9 +40,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
     Route::post('/address', [AddressController::class,'store']);
     Route::patch('/address/{id}', [AddressController::class,'update']);
-    Route::get('/cart', [CartController::class,'index']);
-    Route::post('/cart', [CartController::class,'store']);
-    Route::delete('/cart/{id}', [CartController::class,'destroy']);
+    Route::apiResource('/cart', CartController::class);
+
 
 });
 require __DIR__ . '/api-admin.php';

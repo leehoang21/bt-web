@@ -67,9 +67,9 @@ class OrderRepository extends BaseRepository
                     'address:id,full_name,phone,address,id_user',
                     'user:id,name,phone,email',
                     'user.avatar:id,url',
-
                     'orderDetails:id_order,id_product,quantity',
                     'products:id,name,price,total,description,slug,short_description,serial_number,warranty_period',
+                    'products.images:id,url',
 
                 ]
             )

@@ -42,7 +42,7 @@ class OrderController extends Controller
         $order = [
             'id_user' => isEmpty(auth()->user()) ? -1 : auth()->user()->id,
             'status' => AppConst::ORDER_STATUS_PENDING,
-            'address' => $request->address,
+            'id_address' => $request->id_address,
         ];
         $arrOrder = [];
         $orders = $request->orders;
