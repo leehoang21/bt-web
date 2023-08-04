@@ -27,7 +27,6 @@ class ProductRepository extends BaseRepository
 
         if (!empty($keyword) && !empty($searchFields)) {
             for ($i = 0; $i < count($searchFields); $i++)
-
                 if ($searchFields[$i] == 'name' || $searchFields[$i] == 'description' || $searchFields[$i] == 'slug' || $searchFields[$i] == 'short_description') {
                     $searchFields[$i] = 'products.' . $searchFields[$i];
                     $stringLike = '%' . $keyword[$i] . '%';
@@ -58,6 +57,7 @@ class ProductRepository extends BaseRepository
                     ];
                 }
         }
+        error_log(implode(' and ', $whereRaw));
         if (!empty($whereRaw))
 
             $query->whereRaw(implode(' and ', $whereRaw));

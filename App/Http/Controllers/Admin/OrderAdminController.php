@@ -7,8 +7,7 @@ use App\Http\Requests\CreateOderRequest;
 use App\Http\Requests\OderRequest;
 use App\Main\Config\AppConst;
 use App\Main\Services\OrderService;
-use Illuminate\Http\Request;
-use function Sodium\add;
+use Illuminate\Http\Request;;
 
 class OrderAdminController extends Controller
 {
@@ -35,40 +34,43 @@ class OrderAdminController extends Controller
         return $this->service->getAll($data);
     }
 
+
+
     public function store(CreateOderRequest $request)
     {
 
-        $order = [
-            'id_user' => $request->id_user,
-            'status' => AppConst::ORDER_STATUS_PENDING,
-            'id_address' => $request->id_address,
-        ];
-
-        $arrOrder = [];
-        $orders = $request->orders;
-
-        for ($i = 0; $i < count($orders); $i++) {
-            $orderDetail = [
-                'id_product' => $orders[$i]['id_product'],
-                'quantity' => $orders[$i]['total'],
-            ];
-            $arrOrder[$i] = [
-                'order' => $order,
-                'order_detail' => $orderDetail,
-            ];
-        }
-
-        $data = [
-            'orders' => $arrOrder,
-
-        ];
-
-        return $this->service->save($data);
+//        $order = [
+//            'id_user' => $request->id_user,
+//            'status' => AppConst::ORDER_STATUS_PENDING,
+//            'id_address' => $request->id_address,
+//        ];
+//
+//        $arrOrder = [];
+//        $orders = $request->orders;
+//
+//        for ($i = 0; $i < count($orders); $i++) {
+//            $orderDetail = [
+//                'id_product' => $orders[$i]['id_product'],
+//                'quantity' => $orders[$i]['total'],
+//            ];
+//            $arrOrder[$i] = [
+//                'order' => $order,
+//                'order_detail' => $orderDetail,
+//            ];
+//        }
+//
+//        $data = [
+//            'orders' => $arrOrder,
+//
+//        ];
+//
+//        return $this->service->save($data);
+        return $request;
     }
 
-    public function show()
+    public function show($id)
     {
-        return 'show';
+        return $this->service->getById($id);
     }
 
     public function update(OderRequest $request, $id)

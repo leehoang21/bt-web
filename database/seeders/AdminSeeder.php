@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             'user_name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
-            'remember_token' => '12345456'
+            'remember_token' => bcrypt('admin_token')
         ];
         \App\Models\Admin::create($data);
 
