@@ -34,7 +34,13 @@ class OrderService
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['orders'], $paginate);
     }
 
-
+    public function getById($id) {
+        $product = $this->repository->getById($id);
+        if($product){
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess($product);
+        }
+        return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+    }
 
     public function getOrderById($id) {
         $product = $this->repository->getProductById($id);

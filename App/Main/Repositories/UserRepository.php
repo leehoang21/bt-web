@@ -55,6 +55,7 @@ class UserRepository extends BaseRepository
             ->with([
 
                 'avatar:id,url',
+                'addresses:id,address,phone,full_name'
             ])
             ->get();
         return [

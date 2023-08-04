@@ -81,7 +81,8 @@ class PostRepository extends BaseRepository
     {
         $post = Post::query()
             ->with([
-                'images:url,id',
+                'images:id,url',
+                'tags:name,id,slug'
             ]);
         $post = $post->where('slug', $slug)->first();
         $dto = new PostDTO($post);
