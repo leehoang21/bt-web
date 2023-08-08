@@ -38,13 +38,15 @@ class OrderController extends Controller
 
     public function store(CreateOderRequest $request)
     {
-
         $order = [
-            'id_user' => isEmpty(auth()->user()) ? -1 : auth()->user()->id,
+            'id_user' =>  auth()->user()->id,
             'status' => AppConst::ORDER_STATUS_PENDING,
             'id_address' => $request->id_address,
         ];
         $arrOrder = [];
+        foreach ($request->orders as $key => $value) {
+           $order[$key] = $value;
+        }
         $orders = $request->orders;
 
         for ($i = 0; $i < count($orders); $i++) {
@@ -62,6 +64,7 @@ class OrderController extends Controller
             'orders' => $arrOrder,
 
         ];
+
         return $this->service->save($data);
     }
 
