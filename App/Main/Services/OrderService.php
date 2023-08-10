@@ -3,20 +3,18 @@
 namespace App\Main\Services;
 
 use App\Main\Repositories\OrderRepository;
-use App\Main\Repositories\ProductRepository;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
-
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OrderService
 {
     protected OrderRepository $repository;
-    protected  OrderDetail $orderDetail;
+    protected OrderDetail $orderDetail;
+
     public function __construct(
         OrderRepository $repository,
-        OrderDetail $orderDetail
+        OrderDetail     $orderDetail
 
     )
     {
@@ -25,7 +23,8 @@ class OrderService
 
     }
 
-    public function getAll( $data) {
+    public function getAll($data)
+    {
         $products = $this->repository->getAll($data);
         $total = $products['total'];
         $limit = $data['limit'];
@@ -34,26 +33,29 @@ class OrderService
         return (new \App\Main\Helpers\Response)->responseJsonSuccessPaginate($products['orders'], $paginate);
     }
 
-    public function getById($id) {
+    public function getById($id)
+    {
         $product = $this->repository->getById($id);
-        if($product){
+        if ($product) {
             return (new \App\Main\Helpers\Response)->responseJsonSuccess($product);
         }
         return (new \App\Main\Helpers\Response)->responseJsonFail(false);
     }
 
-    public function getOrderById($id) {
+    public function getOrderById($id)
+    {
         $product = $this->repository->getProductById($id);
-        if($product){
+        if ($product) {
             return (new \App\Main\Helpers\Response)->responseJsonSuccess($product);
         }
         return (new \App\Main\Helpers\Response)->responseJsonFail(false);
     }
 
-    public function save($data) {
+    public function save($data)
+    {
         DB::beginTransaction();
-        try{
-            if(empty($data['id'])) {
+        try {
+            if (empty($data['id'])) {
                 $result = $this->createData($data);
             } else {
                 $result = $this->updateData($data);
@@ -69,7 +71,8 @@ class OrderService
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 
-    private function createData($data) {
+    private function createData($data)
+    {
 
         $orders = $data['orders'];
 
@@ -82,16 +85,27 @@ class OrderService
             $products[$i] = $orders[$i]['order_detail']['id_product'];
             $array_total[$i] = $orders[$i]['order_detail']['quantity'];
 
-
             $result2 = $this->orderDetail->create($orders[$i]['order_detail']);
             if (!$result2) {
                 return (new \App\Main\Helpers\Response)->responseJsonFail(false);
             }
         }
-        return  [
+        return [
             'id' => $result->id,
+            'user' => $result->with([
+                'user:id,name,email'
+            ])
+                ->where('id_user', $result->id_user)
+                ->first()
+                ->user
+            ,
             'status' => $result->status,
-            'address' => $result->address,
+            'address' => $result->with([
+                'address:id,address,phone'
+            ])
+                ->where('id_address', $result->id_address)
+                ->first()
+                ->address,
             'created_at' => $result->created_at,
             'updated_at' => $result->updated_at,
             'products' => $products,
@@ -101,12 +115,13 @@ class OrderService
     }
 
 
-    private function updateData($data) {
+    private function updateData($data)
+    {
 
         $value = [
             'status' => $data['status'],
         ];
-        return $this->repository->update('id', $data['id'],$value);
+        return $this->repository->update('id', $data['id'], $value);
     }
 
 }
