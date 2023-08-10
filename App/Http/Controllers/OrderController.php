@@ -44,9 +44,7 @@ class OrderController extends Controller
             'id_address' => $request->id_address,
         ];
         $arrOrder = [];
-        foreach ($request->orders as $key => $value) {
-           $order[$key] = $value;
-        }
+
         $orders = $request->orders;
 
         for ($i = 0; $i < count($orders); $i++) {
