@@ -56,6 +56,19 @@ class AuthService
             , Response::HTTP_CODE_SUCCESS);
     }
 
+    public function logout()
+    {
+        if (\auth()->check()) {
+
+            auth()->user()->tokens()->delete();
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess('Logout success', Response::HTTP_CODE_SUCCESS);
+        } else {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+        }
+
+
+    }
+
     public function loginUser($email, $password)
     {
 
