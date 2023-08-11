@@ -62,7 +62,7 @@ class CategoryService
             DB::rollBack();
             error_log($e->getMessage());
             if ($e->getCode() == 23000) {
-                return (new \App\Main\Helpers\Response)->responseJsonFail(message: 'The slug has already been taken.',httpCode: Response::HTTP_CODE_UNAUTHORIZED);
+                return (new \App\Main\Helpers\Response)->responseJsonFail(message: 'The slug has already been taken.');
             }
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
