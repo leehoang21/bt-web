@@ -22,16 +22,14 @@ Route::post('/upload_image', [ImageController::class, 'store']);
 Route::get('/setting', [SettingController::class, 'index']);
 Route::get('/post', [PostController::class, 'index']);
 Route::get('/post/{slug}', [PostController::class, 'show']);
-
 Route::get('/category', [CategoryController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);
 Route::get('/product', [ProductController::class,'index']);
 Route::post('/advisory', [\App\Http\Controllers\AdvisoryController::class,'store']);
 Route::get('/product_by_category/{slug}', [CategoryController::class,'getByCategory']);
-
 Route::get('/tag', [\App\Http\Controllers\TagController::class, 'index']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum',\App\Http\Middleware\AuthUser::class])->group(function () {
     Route::post('create_order', [OrderController::class,'store']);
     Route::get('order', [OrderController::class,'index']);
     Route::get('/profile', [UserController::class,'show']);
@@ -41,6 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/address', [AddressController::class,'store']);
     Route::patch('/address/{id}', [AddressController::class,'update']);
     Route::apiResource('/cart', CartController::class);
+    Route::post('/auth/logout', [AuthController::class,'logout']);
 
 
 });

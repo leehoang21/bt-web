@@ -4,7 +4,6 @@ namespace App\Main\Services;
 
 use App\Main\Repositories\OrderRepository;
 use App\Models\OrderDetail;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class OrderService
@@ -53,7 +52,7 @@ class OrderService
 
     public function save($data)
     {
-        DB::beginTransaction();
+
         try {
             if (empty($data['id'])) {
                 $result = $this->createData($data);
@@ -61,11 +60,11 @@ class OrderService
                 $result = $this->updateData($data);
             }
 
-            DB::commit();
+
         } catch (Throwable $e) {
-            DB::rollBack();
+
             error_log($e->getMessage());
-            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+            return (new \App\Main\Helpers\Response)->responseJsonFail($e->getMessage());
         }
 
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
@@ -86,6 +85,7 @@ class OrderService
             $array_total[$i] = $orders[$i]['order_detail']['quantity'];
 
             $result2 = $this->orderDetail->create($orders[$i]['order_detail']);
+            error_log($result2);
             if (!$result2) {
                 return (new \App\Main\Helpers\Response)->responseJsonFail(false);
             }

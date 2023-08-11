@@ -51,6 +51,12 @@ class AuthController extends Controller
         return $this->userService->save($data);
     }
 
+    public function logout()
+
+    {
+        return $this->authService->logout();
+    }
+
     public function sendVerify(SendVerifyRequest $request)
     {
         $email = $request->email;

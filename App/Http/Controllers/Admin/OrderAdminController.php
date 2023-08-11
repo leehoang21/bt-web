@@ -65,7 +65,7 @@ class OrderAdminController extends Controller
 //        ];
 //
 //        return $this->service->save($data);
-        return $request;
+        return 'NO SUPPORT';
     }
 
     public function show($id)
@@ -78,7 +78,6 @@ class OrderAdminController extends Controller
         $data = [
             'id' => $id,
             'status' => $request->status,
-            'address' => $request->address,
         ];
         return $this->service->save($data);
     }

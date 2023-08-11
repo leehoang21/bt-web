@@ -26,5 +26,10 @@ class AuthAdminController extends Controller
         return $this->authService->login($userName, $password);
     }
 
+    public function  logout()
+    {
+        return $this->authService->logout( );
+    }
+
 
 }
