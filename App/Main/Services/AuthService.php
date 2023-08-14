@@ -33,10 +33,10 @@ class AuthService
         $user = $this->adminRepository->findOne('user_name', $userName);
 
         if (empty($user)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist');
         }
         if (!Hash::check($password, $user->password)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect');
         }
 
         $token = $user->createToken('authToken')->plainTextToken;
@@ -61,9 +61,9 @@ class AuthService
         if (\auth()->check()) {
 
             auth()->user()->tokens()->delete();
-            return (new \App\Main\Helpers\Response)->responseJsonSuccess('Logout success', Response::HTTP_CODE_SUCCESS);
+            return (new \App\Main\Helpers\Response)->responseJsonSuccess('Logout success');
         } else {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist');
         }
 
 
@@ -76,10 +76,10 @@ class AuthService
 
 
         if (empty($user)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist');
         }
         if (!Hash::check($password, $user->password)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect');
         }
 
         $token = $user->createToken('authToken')->plainTextToken;
@@ -131,17 +131,17 @@ class AuthService
     {
         $otp = $this->otpRepository->findOneLast('email', $email);
         if (empty($otp)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist');
         }
         if ($otp->is_used) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP has been used', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP has been used');
         }
         if ($otp->created_at->addMinutes(5) < now()) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP has expired', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP has expired');
         }
 
         if ($otp->otp != $_otp) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('OTP incorrect');
         }
         $otp->is_used = true;
         $otp->save();
@@ -152,11 +152,11 @@ class AuthService
     {
         $user = $this->userRepository->findOne('email', $email);
         if (empty($user)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Email does not exist');
         }
         $user->status = 1;
         $user->save();
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success', Response::HTTP_CODE_SUCCESS);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Verify email success');
     }
 
     public function changePass($email, $newPass, $pass = null)
@@ -164,20 +164,17 @@ class AuthService
 
         $user = $this->userRepository->findOne('email', $email);
         if (empty($user)) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist', Response::HTTP_CODE_UNAUTHORIZED);
+            return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist');
         }
         if (!isEmpty($pass)) {
 
             if (!Hash::check($pass, $user->password)) {
-                return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect', Response::HTTP_CODE_UNAUTHORIZED);
+                return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect');
             }
-        } else {
-            return (new \App\Main\Helpers\Response)->responseJsonSuccess('Password incorrect', Response::HTTP_CODE_SUCCESS);
         }
-
         $user->password = Hash::make($newPass);
         $user->save();
-        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Change password success', Response::HTTP_CODE_SUCCESS);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess('Change password success');
     }
 
     private function generateOtp()

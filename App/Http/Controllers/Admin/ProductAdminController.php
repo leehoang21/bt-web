@@ -112,7 +112,6 @@ class ProductAdminController extends Controller
                 'price' => $request->price,
                 'slug' => $request->slug,
                 'description' => $request->description,
-
                 'total' => $request->total,
                 'serial_number' => $request->serial_number,
                 'warranty_period' => $request->warranty_period,

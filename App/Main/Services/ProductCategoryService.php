@@ -44,7 +44,7 @@ class ProductCategoryService
         DB::beginTransaction();
         try{
 
-            $this->repository->deleteWhere('id_category',$id);
+            $this->repository->deleteWhere('id_product',$id);
 
             for ($i=0; $i < count($categories); $i++) {
                 $this->repository->create(
