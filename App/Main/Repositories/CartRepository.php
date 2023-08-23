@@ -26,6 +26,7 @@ class CartRepository extends BaseRepository
                     'user:id,name,phone,email',
                     'user.avatar:id,url',
                     'products:id,name,price,total,description,slug,short_description,serial_number,warranty_period',
+                    'products.images:id,url',
                 ]
             )
             ->where('id_user', $idUser)
