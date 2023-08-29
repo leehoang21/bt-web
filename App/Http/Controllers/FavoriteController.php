@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CartRequest;
-use App\Main\Services\CartService;
+use App\Http\Requests\FavoriteRequest;
+use App\Main\Services\FavoriteService;
 use Illuminate\Http\Request;
 
-class CartController extends Controller
+class FavoriteController extends Controller
 {
-    protected CartService $service;
+    protected FavoriteService $service;
 
     public function __construct(
-        CartService $service
+        FavoriteService $service
     )
     {
         $this->service = $service;
@@ -28,30 +29,33 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->service->delete($id);
+        $favorite = [
+            'id_user' => auth()->user()->id,
+            'id_product' => $id,
+
+        ];
+
+        $result = $this->service->delete($favorite);
         return $result;
     }
 
-    public function store(CartRequest $request)
+    public function store(FavoriteRequest $request)
     {
 
         $cart = [
             'id_user' => auth()->user()->id,
             'id_product' => $request->id_product,
-            'quantity' => $request->total,
-        ];
-        $data = [
-            'data' => $cart,
 
         ];
-        return $this->service->save($data);
+
+        return $this->service->save($cart);
     }
 
-    public function update(CartRequest $request, int $id)
+    public function update(FavoriteRequest $request, int $id)
     {
 
         $cart = [
-            'quantity' => $request->total,
+
         ];
         $data = [
             'data' => $cart,

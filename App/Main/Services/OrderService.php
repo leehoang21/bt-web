@@ -3,6 +3,7 @@
 namespace App\Main\Services;
 
 use App\Main\Repositories\OrderRepository;
+use App\Main\Repositories\ProductRepository;
 use App\Models\OrderDetail;
 use Throwable;
 
@@ -10,15 +11,18 @@ class OrderService
 {
     protected OrderRepository $repository;
     protected OrderDetail $orderDetail;
+    protected  $productRepository;
 
     public function __construct(
         OrderRepository $repository,
-        OrderDetail     $orderDetail
+        OrderDetail     $orderDetail,
+        ProductRepository $productRepository
 
     )
     {
         $this->repository = $repository;
         $this->orderDetail = $orderDetail;
+        $this->productRepository = $productRepository;
 
     }
 
@@ -59,17 +63,17 @@ class OrderService
             } else {
                 $result = $this->updateData($data);
             }
-
-
         } catch (Throwable $e) {
 
-            error_log($e->getMessage());
             return (new \App\Main\Helpers\Response)->responseJsonFail($e->getMessage());
         }
 
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function createData($data)
     {
 
@@ -83,11 +87,12 @@ class OrderService
             $orders[$i]['order_detail']['id_order'] = $result->id;
             $products[$i] = $orders[$i]['order_detail']['id_product'];
             $array_total[$i] = $orders[$i]['order_detail']['quantity'];
-
+            //
+            $this->isMoreProduct($products[$i],$array_total[$i]);
+            //
             $result2 = $this->orderDetail->create($orders[$i]['order_detail']);
-            error_log($result2);
             if (!$result2) {
-                return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+                throw   new \Exception('Create order detail fail');
             }
         }
         return [
@@ -112,6 +117,21 @@ class OrderService
             'total' => $array_total,
         ];
 
+    }
+    private function isMoreProduct(int $id, int $quantity)
+    {
+        $products = $this->productRepository
+            ->find($id);
+        if($products == null) {
+            throw new \Exception('Not found');
+        }else{
+            $products = $products->first();
+        }
+
+        if ($products->total >= $quantity) {
+            return true;
+        }
+        throw new \Exception('The quantity of product is not enough');
     }
 
 

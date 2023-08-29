@@ -166,11 +166,8 @@ class AuthService
         if (empty($user)) {
             return (new \App\Main\Helpers\Response)->responseJsonFail('User does not exist');
         }
-        if (!isEmpty($pass)) {
-
-            if (!Hash::check($pass, $user->password)) {
-                return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect');
-            }
+        if (!isEmpty($pass) || !Hash::check($pass, $user->password)) {
+            return (new \App\Main\Helpers\Response)->responseJsonFail('Password incorrect');
         }
         $user->password = Hash::make($newPass);
         $user->save();

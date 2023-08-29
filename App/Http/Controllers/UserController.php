@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Main\Helpers\Common;
 use App\Main\Services\UserService;
 use Illuminate\Support\Facades\Hash;
+use function PHPUnit\Framework\isEmpty;
 
 class UserController extends Controller
 {
@@ -23,6 +25,7 @@ class UserController extends Controller
     public function store(UserUpdateRequest $request)
     {
         $password = Hash::make($request['password']);
+
         $data = [
             'data' =>
                 [
