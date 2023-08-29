@@ -28,6 +28,12 @@ class AddressService
         return (new \App\Main\Helpers\Response)->responseJsonFail(false);
     }
 
+    public function getAll($data)
+    {
+        $data = $this->repository->getAll($data);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($data['data']);
+    }
+
 
     public function save($data)
     {
@@ -60,7 +66,7 @@ class AddressService
 
     private function updateData($data)
     {
-        $query=   $this->repository->update(
+        $query = $this->repository->update(
             [
                 'id',
             ],
@@ -74,14 +80,16 @@ class AddressService
 
     public function delete($id)
     {
-        return $this->save(
-            [
-                'id' => $id,
-                'data' => [
-                    'status' => 2
+        DB::beginTransaction();
+        try {
+            $result = $this->repository->delete($id);
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
 
-                ]
-            ]
-        );
+            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+        }
+
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result, message: true);
     }
 }

@@ -37,6 +37,15 @@ class AddressController extends Controller
         return $this->userService->save($data);
     }
 
+    public function index()
+    {
+        $idUser = auth()->user()->id;
+        $data = [
+            'id_user' => $idUser,
+        ];
+        return $this->userService->getAll($data);
+    }
+
     public function update(AddressFormRequest $request, int $id)
     {
 
@@ -60,6 +69,12 @@ class AddressController extends Controller
         return $this->userService->getById(
             auth()->user()->id
         );
+    }
+
+    public function destroy($id)
+    {
+        $result = $this->userService->delete($id);
+        return $result;
     }
 
 }

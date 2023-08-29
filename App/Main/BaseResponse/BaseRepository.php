@@ -79,6 +79,7 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->find($id, $columns);
     }
 
+
     public function findOne($attribute, $value, array $columns = ['*'])
     {
         //reset model
@@ -184,13 +185,36 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->destroy($id);
     }
 
+    public function destroy(array $params)
+    {
+        $delete = [];
+        for ($i = 0; $i < count($params); $i++) {
+            $delete[$i] = $params[$i];
+        }
+        //gets
+        $query = $this->model;
+        $query->whereRaw(
+            implode(' and ', $delete)
+        );
+        $data = $query->delete();
+
+        return [
+            'data' => $data,
+            'message' => 'success',
+        ];
+    }
+
 
     public function deleteWhere($attribute, $value)
     {
+
         //reset model
         $this->getModel();
+
         return $this->model->where($attribute, '=', $value)->delete();
     }
+
+
 
     /**
      * @param array $conditions

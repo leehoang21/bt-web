@@ -109,6 +109,8 @@ class ProductRepository extends BaseRepository
     }
 
 
+
+
     public function getProductBySlug($slug)
     {
 

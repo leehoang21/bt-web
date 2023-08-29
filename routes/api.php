@@ -36,9 +36,10 @@ Route::middleware(['auth:sanctum',\App\Http\Middleware\AuthUser::class])->group(
     Route::post('/profile', [UserController::class,'store']);
     Route::post('/update_avatar', [ImageController::class,'updateAvatar']);
     Route::post('/auth/change_password', [AuthController::class,'changePassword']);
-    Route::post('/address', [AddressController::class,'store']);
-    Route::patch('/address/{id}', [AddressController::class,'update']);
+    Route::apiResource('/address', AddressController::class);
+
     Route::apiResource('/cart', CartController::class);
+    Route::apiResource('/favorite', \App\Http\Controllers\FavoriteController::class);
     Route::post('/auth/logout', [AuthController::class,'logout']);
 
 

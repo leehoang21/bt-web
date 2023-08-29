@@ -3,6 +3,8 @@
 namespace App\Main\Services;
 
 use App\Main\Repositories\CartRepository;
+use App\Main\Repositories\ProductRepository;
+use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -10,12 +12,16 @@ use Throwable;
 class CartService
 {
     protected CartRepository $repository;
+    protected $productRepository;
 
     public function __construct(
-        CartRepository $repository,
+        CartRepository    $repository,
+        ProductRepository $productRepository
+
     )
     {
         $this->repository = $repository;
+        $this->productRepository = $productRepository;
     }
 
     public function getAll($data)
@@ -38,7 +44,7 @@ class CartService
         } catch (Throwable $e) {
             DB::rollBack();
             error_log($e->getMessage());
-            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+            return (new \App\Main\Helpers\Response)->responseJsonFail($e->getMessage());
         }
 
         return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
@@ -48,19 +54,69 @@ class CartService
     {
 
         $data = $data['data'];
+        $cart = Cart::query()
+            ->where('id_user', $data['id_user'])
+            ->where('id_product', $data['id_product'])
+            ->first();
 
-        $result = $this->repository->create($data);
-        return $result;
+        if ($cart != null) {
+            $cart->quantity = $cart->quantity + $data['quantity'];
+            if ($this->isMoreProduct($data['id_product'], $cart->quantity)) {
+                $cart->save();
+                return $cart;
+            }
+
+        } else {
+            if ($this->isMoreProduct($data['id_product'], $data['quantity'])) {
+
+                $result = $this->repository->create($data);
+                return $result;
+            }
+        }
+        return (new \App\Main\Helpers\Response)->responseJsonFail(false);
     }
 
+
+    /**
+     * @throws \Exception
+     */
+    private function isMoreProduct(int $id, int $quantity)
+    {
+        $products = $this->productRepository
+            ->find($id);
+        if($products == null) {
+            throw new \Exception('Not found');
+        }else{
+            $products = $products->first();
+        }
+
+        if ($products->total >= $quantity) {
+            return true;
+        }
+        throw new \Exception('The quantity of product is not enough');
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function updateData($data)
     {
         $id = $data['id'];
-        $query = $this->repository->findOrFail($id);
-        if (!$query) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail(false);
+        $data = $data['data'];
+
+        try {
+            $query = $this->repository->findOrFail($id);
+        } catch (\Exception $e) {
+            throw  new \Exception('Not found');
         }
-        foreach ($data['data'] as $key => $value) {
+
+        if (!$query) {
+            throw  new \Exception('Not found');
+        }
+        if (!($this->isMoreProduct($query['id_product'], $data['quantity']))) {
+            throw new \Exception('The quantity of product is not enough');
+        }
+        foreach ($data as $key => $value) {
             $query->$key = $value;
         }
         $query->save();

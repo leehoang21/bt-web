@@ -15,6 +15,23 @@ class AddressRepository extends BaseRepository
         return Address::class;
     }
 
+    public function getAll(array $params = [])
+
+    {
+        $idUser = $params['id_user'];
+        //get
+        $data = $this
+            ->model
+
+            ->where('id_user', $idUser)
+            ->get();
+
+        return [
+            'data' => $data,
+            'message' => 'success',
+        ];
+    }
+
     public function getById($id)
     {
         $data = Address::query()

@@ -87,6 +87,7 @@ class UserService
             return (new \App\Main\Helpers\Response)->responseJsonFail(false);
         }
         foreach ($data['data'] as $key => $value) {
+
             if ($key != 'status') {
                 $user->$key = $value;
             }
