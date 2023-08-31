@@ -111,4 +111,11 @@ class UserService
             ]
         );
     }
+
+    public function deleteUser($id)
+    {
+        $result = $this->repository->delete($id);
+        return (new \App\Main\Helpers\Response)->responseJsonSuccess($result);
+
+    }
 }
