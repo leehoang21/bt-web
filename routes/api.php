@@ -42,6 +42,5 @@ Route::middleware(['auth:sanctum',\App\Http\Middleware\AuthUser::class])->group(
     Route::apiResource('/favorite', \App\Http\Controllers\FavoriteController::class);
     Route::post('/auth/logout', [AuthController::class,'logout']);
 
-
 });
 require __DIR__ . '/api-admin.php';

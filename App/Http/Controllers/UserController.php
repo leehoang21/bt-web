@@ -47,4 +47,11 @@ class UserController extends Controller
         );
     }
 
+    public function delete($id)
+    {
+        error_log($id);
+        return $this->userService->deleteUser($id);
+    }
+
+
 }
