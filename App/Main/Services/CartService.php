@@ -55,20 +55,21 @@ class CartService
 
         $data = $data['data'];
         $cart = Cart::query()
-            ->where('id_user', $data['id_user'])
-            ->where('id_product', $data['id_product'])
+            ->whereRaw('id_user = ? and id_product = ?', [$data['id_user'], $data['id_product']])
             ->first();
 
         if ($cart != null) {
             $cart->quantity = $cart->quantity + $data['quantity'];
+
             if ($this->isMoreProduct($data['id_product'], $cart->quantity)) {
+
                 $cart->save();
                 return $cart;
             }
 
         } else {
             if ($this->isMoreProduct($data['id_product'], $data['quantity'])) {
-
+                error_log('create');
                 $result = $this->repository->create($data);
                 return $result;
             }
@@ -83,13 +84,11 @@ class CartService
     private function isMoreProduct(int $id, int $quantity)
     {
         $products = $this->productRepository
-            ->find($id);
+            ->findOrFail($id);
         if($products == null) {
             throw new \Exception('Not found');
-        }else{
-            $products = $products->first();
         }
-
+        error_log($products->name);
         if ($products->total >= $quantity) {
             return true;
         }
