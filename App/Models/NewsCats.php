@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Advisory extends Model
+class NewsCats extends Model
 {
     use HasFactory;
 
-    protected  $table = 'advisories';
-
     protected $fillable = [
-        'phone',
+        'id',
         'name',
-        'status',
-        'email',
-        'content',
+        'decription',
+        'image',
+        'e_name',
+        'e_decription',
     ];
-
 }

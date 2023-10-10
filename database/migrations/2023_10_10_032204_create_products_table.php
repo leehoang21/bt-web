@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        \Illuminate\Support\Facades\DB::update('ALTER TABLE products DROP COLUMN id_category');
-
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -24,9 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('id_category');
-        });
+        Schema::dropIfExists('products');
     }
 };

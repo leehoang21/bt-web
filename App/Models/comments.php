@@ -1,22 +1,20 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ImageProduct extends Model
+class comments extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'id_image',
-        'id_product',
+        'id',
+        'title',
+        'detail',
+        'news_id',
+        'e_title',
+        'e_detail',
     ];
-
-    public function image()
-    {
-        return $this->belongsTo(Image::class, 'id_image');
-    }
-
-
 }

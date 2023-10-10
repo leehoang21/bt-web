@@ -12,11 +12,15 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->double('price')->change();
-
+        Schema::create('news_cats', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('decription');
+            $table->integer('image');
+            $table->string('e_name');
+            $table->string('e_decription');
+            $table->timestamps();
         });
-
     }
 
     /**
@@ -26,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('news_cats');
     }
 };
