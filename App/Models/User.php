@@ -13,19 +13,22 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-
-
     protected $fillable = [
         'name',
         'email',
-        'phone',
+        'username',
         'password',
-        'status',
-
     ];
 
     /**
@@ -36,7 +39,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-
     ];
 
     /**
@@ -48,13 +50,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function avatar()
+    /**
+     * Always encrypt password when it is updated.
+     *
+     * @param $value
+     * @return string
+     */
+    public function setPasswordAttribute($value)
     {
-        return $this->belongsToMany(Image::class, 'avatars', 'id_user', 'id_image');
-    }
-
-    public function addresses()
-    {
-        return $this->hasMany(Address::class, 'id_user');
+        $this->attributes['password'] = bcrypt($value);
     }
 }

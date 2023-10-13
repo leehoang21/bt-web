@@ -1,0 +1,99 @@
+$threshold: 55%
+
+@function contrast-color($color, $dark, $light)
+	@return if(lightness($color) < $threshold, $light, $dark)
+
+@each $color, $value in $button
+	.btn-#{$color}
+		background-color: $value
+		color: contrast-color($value, #333, #fff)
+		border: 0
+		+on-hover
+			background-color: darken($value, 10%)
+
+	.btn-border-#{$color}
+		border: 1px solid $value
+		color: $value
+		+bg(white)
+		+on-hover
+			background-color: $value
+			color: contrast-color($value, #333, #fff)
+
+// @each $gradient, $value in $gradients
+// 	.btn-#{$gradient}
+// 		background: $value
+
+.btn
+	padding: r(10px) r(24px)
+	display: inline-flex
+	+trans-all
+	+font(500,16px,24px)
+	+flex-center
+	letter-spacing: 0.04em
+	border-radius: (12px)
+	gap: r(8px)
+	+content-margins
+		display: inline-block
+
+.btn-group
+	display: flex
+	gap: r(32px)
+
+.swiper-btn
+	display: inline-flex
+	+flex-center
+	+circle(42px)
+	+text(gray-300)
+	font-size: r(16px)
+	cursor: pointer
+	z-index: 2
+	transition: 0.3s all
+	+bg(white)
+	+remove(lg,max)
+	+on-hover
+		+bg(primary-500)
+		+text(white)
+	&.swiper-button-disabled
+		opacity: 0
+		pointer-events: none
+	&.no-box
+		width: auto
+		height: auto
+		background: transparent
+		+text(gray-300)
+		+on-hover
+			+text(primary-500)
+
+.swiper-navigation
+	&.is-between
+		.swiper-btn
+			position: absolute
+			+center(Y)
+			margin: 0 r(30px)
+			&.swiper-prev
+				right: 100%
+			&.swiper-next
+				left: 100%
+			+mq-max(xxl)
+				margin: 0 r(10px)
+
+		&.is-no-gap
+			.swiper-btn
+				margin: 0
+				&.swiper-prev
+					right: auto
+					left: 0
+				&.swiper-next
+					left: auto
+					right: 0
+	&.is-left
+		display: flex
+		gap: r(12px)
+
+.view-more
+	display: inline-flex
+	gap: r(8px)
+	font-weight: 700
+	@extend .body-4
+	+text(primary-500)
+	align-items: center

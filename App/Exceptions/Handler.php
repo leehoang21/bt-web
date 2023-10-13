@@ -2,15 +2,22 @@
 
 namespace App\Exceptions;
 
-use App\Main\Helpers\Response;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * The list of the inputs that are never flashed to the session on validation exceptions.
+     * A list of the exception types that are not reported.
+     *
+     * @var array<int, class-string<Throwable>>
+     */
+    protected $dontReport = [
+        //
+    ];
+
+    /**
+     * A list of the inputs that are never flashed for validation exceptions.
      *
      * @var array<int, string>
      */
@@ -22,11 +29,13 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
+     *
+     * @return void
      */
-    public function register(): void
+    public function register()
     {
-        $this->renderable(function (AuthenticationException $e, $request) {
-            return (new \App\Main\Helpers\Response)->responseJsonFail("Not authenticated",Response:: HTTP_CODE_UNAUTHORIZED,);
+        $this->reportable(function (Throwable $e) {
+            //
         });
     }
 }
