@@ -1,0 +1,49 @@
+// Make the breakpoints
+@mixin bp($breakpoint) {
+    $query: map-get($gl-mq-list, $breakpoint);
+  
+    @if $query !=null {
+      @media ($gl-mq-width: #{nth($query, 1)}) {
+        @content;
+      }
+    }
+  }
+  
+  // Function to generate the grid by number
+  @mixin makeGridByNumber($grid) {
+    @for $i from 1 through $gl-colCount {
+      .row.#{$grid}-#{$i}>* {
+        $fraction: 1 / $i;
+        flex: 0 0 map-get($gl-colFractions, $fraction);
+        max-width: map-get($gl-colFractions, $fraction);
+      }
+    }
+  }
+  
+  // Function to generate the grid by columns
+  @mixin makeCol($col) {
+    @for $i from 1 through $gl-colCount {
+      .#{$col}-#{$i} {
+        flex: 0 0 map-get($gl-colPortions, $i);
+        max-width: map-get($gl-colPortions, $i);
+      }
+    }
+  }
+  
+  
+  // Function to generate the offset
+  @mixin makeOff($off) {
+    @for $i from 0 through $gl-colCount - 1 {
+      .#{$off}-#{$i} {
+        margin-left: map-get($gl-colPortions, $i);
+      }
+  
+    }
+  
+    // @for $i from 0 through $gl-colCount - 1 {
+    //   .offset-right-#{$i} {
+    //     margin-right: map-get($gl-colPortions, $i);
+    //   }
+    // }
+  
+  }

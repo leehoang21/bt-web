@@ -1,0 +1,90 @@
+//************************
+//    CLASSES
+//************************
+// GRID
+.#{$gl-gridName} {
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: -$gl-gutter;
+    margin-bottom: -$gl-gutter-vertical;
+}
+
+.#{$gl-gridName}>* {
+    width: 100%;
+}
+
+// COLS
+.#{$gl-gridName}>* {
+    box-sizing: border-box;
+    padding: 0 0 $gl-gutter-vertical $gl-gutter;
+}
+
+// JUST "COL"
+.#{$gl-colName} {
+    flex: 1 1 0%;
+}
+
+@media screen and (max-width: 767px) {
+    .#{$gl-gridName} {
+        margin-left: -$gl-gutter / 1.5;
+        margin-bottom: -$gl-gutter-vertical / 1.5;
+    }
+
+    .#{$gl-gridName}>* {
+        padding: 0 0 $gl-gutter-vertical / 1.5 $gl-gutter / 1.5;
+    }
+}
+
+/************************
+    HELPERS SUFFIXES
+*************************/
+// FOR GRID
+.#{$gl-gridName} {
+
+    // No spacing between cols : noGutter
+    &.no-gutter {
+        margin: 0;
+
+        >* {
+            padding: 0;
+        }
+    }
+
+    // Equal heights columns
+    &.equal-height>* {
+        align-self: stretch;
+
+        >* {
+            height: 100%;
+        }
+    }
+}
+
+/************************
+    GRID BY NUMBER
+*************************/
+@include makeGridByNumber(#{$gl-gridName});
+
+@each $mq-key,
+$mq-value in mapReverse($gl-mq-list) {
+    @include bp(#{$mq-key}) {
+        //@media #{$mq-value} {
+        @include makeGridByNumber(#{$gl-gridName}-#{$mq-key});
+    }
+}
+
+/************************
+    COLS SIZES
+*************************/
+@include makeCol(#{$gl-colName});
+@include makeOff(off);
+
+@each $mq-key,
+$mq-value in mapReverse($gl-mq-list) {
+    @include bp(#{$mq-key}) {
+        @include makeCol(#{$gl-colName}-#{$mq-key});
+        @include makeOff(#{$gl-offName}-#{$mq-key});
+        // @include makeFirstLast(-#{$mq-key});
+    }
+}

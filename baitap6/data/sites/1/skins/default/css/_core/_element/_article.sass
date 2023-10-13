@@ -1,0 +1,33 @@
+.article-content
+	@extend .body-3
+	font-weight: 500
+	> *
+		+ *
+			margin-top: r(20px)
+	ul
+		+layout-col(4px)
+		list-style: disc
+		padding-left: r(16px)
+		li
+			&::marker
+				+text(primary-500)
+	table
+		td,th
+			border: 1px solid #dee2e6
+			padding: .75rem
+			vertical-align: top
+	h2
+		font-size: r(20px)
+		font-weight: 700
+	h3
+		font-size: r(18px)
+		font-weight: 600
+	em,i
+		font-style: italic
+	* + h2
+		margin-top: r(28px)
+
+.expand-content
+	overflow: hidden
+	&.show
+		max-height: none !important
