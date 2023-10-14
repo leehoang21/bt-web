@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=windows-1252">
+    <title>Bài 1.3</title>
+    <script language=javascript>
+        function chay(){
+
+            let ma = window.document.bai2.MAHS.value;
+            let ten = window.document.bai2.HOTEN.value;
+
+            let dc = window.document.bai2.DIACHI.value;
+            let lop = window.document.bai2.LOP.value;
+
+            if(ma.length <= 0){
+                alert("mã phải được nhập"+ma);
+            } else if(ma.length > 6  ){
+                alert("mã nhập quá giới hạn"+ma);
+            }
+
+            if(ten.length <= 0){
+                alert("tên phải được nhập "+ten);
+            } else if(ten.length > 50  ){
+                alert("tên nhập quá giới hạn"+ten);
+            }
+
+            if(dc.length <= 0){
+                alert("dc phải được nhập"+dc);
+            } else if(gvcn.length > 50  ){
+                alert("dc nhập quá giới hạn"+dc);
+            }
+
+            if(lop.length <= 0){
+                alert("lop phải được nhập"+lop);
+            } else if(lop.length > 50  ){
+                alert("lop nhập quá giới hạn"+lop);
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+<form method="post" name="bai2">
+    <table>
+        <tr>
+            <td>MAHS</td>
+            <td>
+                <input type="text" value="" name="MAHS" required />
+            </td>
+        </tr>
+        <tr>
+            <td>HOTEN</td>
+            <td>
+                <input type="text" value="" name="HOTEN" required />
+            </td>
+        </tr>
+        <tr>
+            <td>NGAYSINH</td>
+            <td>
+                <input type="date" value="" name="NGAYSINH" required />
+            </td>
+        </tr>
+        <tr>
+            <td>DIACHI</td>
+            <td>
+                <input type="text" value="" name="DIACHI" required />
+            </td>
+        </tr>
+        <tr>
+            <td>LOP</td>
+            <td>
+                <input type="text" value="" name="LOP" required />
+            </td>
+        </tr>
+        <tr>
+            <td>DIEMTOAN</td>
+            <td>
+                <input type="number" value="" name="DIEMTOAN" required />
+            </td>
+        </tr>
+        <tr>
+            <td>DIEMLY</td>
+            <td>
+                <input type="number" value="" name="DIEMLY" required />
+            </td>
+        </tr>
+        <tr>
+            <td>DIEMHOA</td>
+            <td>
+                <input type="number" value="" name="DIEMHOA" required />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Gửi feedback" onclick="chay() "/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

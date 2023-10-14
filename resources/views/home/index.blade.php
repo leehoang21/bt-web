@@ -10,7 +10,7 @@
     @auth
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5 style="margin-top:10px">Contacts</h5>
+           
             <a href="create" style="margin-left: 10px;"class="btn btn-success">Thêm</a>
         </div>
         <div class="ibox-content">

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=windows-1252">
+    <title>Bài 1.3</title>
+    <script language=javascript>
+        function chay(){
+            const regex = /[A-Z]/i;
+            const reg = /[0-9]/g;
+            let ma = window.document.bai1.ma.value;
+            let ten = window.document.bai1.ten.value;
+            let khoa = window.document.bai1.khoaHoc.value;
+            let gvcn = window.document.bai1.gvcn.value;
+            if(ma.length <= 0){
+                alert("mã phải được nhập"+ma);
+            } else if(ma.length > 6  ){
+                alert("mã nhập quá giới hạn"+ma);
+            }else if(!(ma.match(regex) ||  ma.match(reg) ) ){
+                alert("mã nhập không đúng định dạng"+ma);
+            }
+
+            if(ten.length <= 0){
+                alert("tên phải được nhập"+ten);
+            } else if(ten.length > 50  ){
+                alert("tên nhập quá giới hạn"+ten);
+            }else if( !ten.match(regex) ){
+                alert("tên nhập không đúng định dạng"+ten);
+            }
+
+            if(gvcn.length <= 0){
+                alert("gvcn phải được nhập"+gvcn);
+            } else if(gvcn.length > 50  ){
+                alert("gvcn nhập quá giới hạn"+gvcn);
+            }else if( !gvcn.match(regex) ){
+                alert("gvcn nhập không đúng định dạng"+gvcn);
+            }
+            window.document.bai1.ma.value = ma;
+            window.document.bai1.ten.value = ten;
+            window.document.bai1.gvcn.value = gvcn;
+            window.document.bai1.khoaHoc.value = khoa;
+
+        }
+    </script>
+</head>
+<body>
+<form method="post" name="bai1">
+    <table>
+        <tr>
+            <td>MALOP</td>
+            <td>
+                <input type="text" value="" name="ma" required />
+            </td>
+        </tr>
+        <tr>
+            <td>TENLOP</td>
+            <td>
+                <input type="text" value="" name="ten" required />
+            </td>
+        </tr>
+        <tr>
+            <td>KHOAHOC</td>
+            <td>
+                <input type="number" value="" name="khoaHoc" required />
+            </td>
+        </tr>
+        <tr>
+            <td>GVCN</td>
+            <td>
+                <input type="text" value="" name="gvcn" required />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Gửi feedback" onclick="chay() "/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>
