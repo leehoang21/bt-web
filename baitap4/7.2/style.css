@@ -10,40 +10,39 @@ body{
     padding:50px;
     box-shadow: 0 10px 50px #858585;
     display: grid;
-   grid-template-columns: 35% 60%;
+   grid-template-columns: 50% 50%;
    column-gap: 5%; 
    row-gap: 30px;
 }
 
-.avatar img{
+.head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.img img{
     width:100px;
     height:100px;
+    margin-right: 50px;
     object-fit: cover;
     border-radius: 50%;
 }
-.avatar{
+.img{
     padding-left:  600px;
+   
     display: flex;
     justify-content: end;
     align-items: center;
 }
 
-.name{
-    margin-left: 20px;
-    
+
+
+.footer{
+    width: 10px;
+    height: 10px;
+    margin-top: 200px;
+   padding-left: 0;
+   padding-right: 100px;
   
-}
-
-.name .contact span{
-    
-    color:#fff;
-    text-align: center;
-    font-size: small;
-   
-}
-
-
-.skills{
-    padding-left:  20px;
-    margin-top: 500px;
 }
