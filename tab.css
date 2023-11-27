@@ -1,0 +1,43 @@
+.tabTab #menu {
+  width: 400px;
+  height: 80px;
+
+  font-family: Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+
+.tabTab #menu ul li {
+  list-style-type: none;
+  display: inline;
+
+}
+
+
+.tabTab #menu ul button:hover {
+  color: #FFF;
+  background-color: #81B101;
+
+}
+
+.tabTab span {
+  display: inline-block;
+  color: #3f3fa1;
+  width: 20px;
+  height: 20px;
+
+  font-size: small;
+}
+
+.tabTab .button-selected {
+  background-color: #81B101;
+}
+
+/* nột dung tab */
+.tabTab #txt {
+  background-color: #3f3fa1;
+  width: inherit;
+  height: 500px;
+  color: white;
+  text-align: center;
+}

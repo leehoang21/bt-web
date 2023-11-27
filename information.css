@@ -1,0 +1,106 @@
+.information body {
+    background-color: #129062;
+    padding: 45px 0;
+    color: white;
+}
+
+
+.information .avatar {
+    border-radius: 100px;
+}
+
+
+.information h3 {
+    font-family: "Lobster", cursive;
+    margin: 10px 0 8px 0;
+}
+
+
+.information p {
+    font-family: system-ui;
+    width: 450px;
+}
+
+
+
+/* style menu */
+
+.information #menu {
+    width: 900px;
+    border: 1px solid #000;
+    height: 100px;
+    background-color: #181818;
+    font-family: Helvetica, sans-serif;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+
+.information #menu ul {
+    margin-top: 42px;
+}
+
+.information #menu ul li {
+    list-style-type: none;
+    display: inline;
+    margin-left: 50px;
+}
+
+
+.information #menu ul li a:link {
+    color: #FFF;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+.information #menu ul li a:visited {
+    color: #FFF;
+
+}
+
+
+.information #menu ul li a:hover {
+    color: #FFF;
+    background-color: #81B101;
+
+}
+
+
+.information .button {
+    margin-bottom: 20px;
+    background-color: white;
+    border: 0;
+    width: 300px;
+    padding: 15px 0 15px 0;
+    border-radius: 100px;
+    font-family: "Roboto Condensed", cursive;
+    font-size: 15px;
+    /* con trỏ hình bàn tay */
+    cursor: pointer;
+}
+
+/* chia màn hình làm 2 */
+
+.information .left-column {
+    width: 20%;
+    float: left;
+
+}
+
+.information .right-column {
+    width: 80%;
+    float: right;
+}
+
+.information #txt {
+    background-color: #3f3fa1;
+    width: inherit;
+    height: 500px;
+    color: white;
+    text-align: center;
+}

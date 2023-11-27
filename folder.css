@@ -1,0 +1,22 @@
+.folderTab .folder {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.folderTab .folder ul {
+    margin-left: 20px;
+    padding: 0;
+    display: none;
+    list-style-type: none;
+}
+
+.folderTab .folder img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Người dùng có thể kích chuột để mở/đóng nút*/
+.folderTab .folder button.selected + img + label + ul {
+    display: block;
+}
