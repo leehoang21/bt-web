@@ -1,13 +1,4 @@
 function sortTable(columnIndex) {
-    //table : bảng dữ liệu
-    //rows : hàng dữ liệu
-    //switching : biến kiểm tra có tiếp tục đổi chỗ hay không
-    //i : biến đếm
-    //x : giá trị của hàng thứ i
-    //y : giá trị của hàng thứ i+1
-    //shouldSwitch : biến kiểm tra xem có cần đổi chỗ hay không
-    //dir : asc hay desc
-    //switchcount : biến đếm
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("myTable");
     switching = true;
@@ -60,14 +51,6 @@ function sortTable(columnIndex) {
 
 
 function searchTable() {
-   
-    //input : ô nhập liệu
-    //filter : giá trị nhập vào
-    //table : bảng dữ liệu
-    //tr : hàng dữ liệu
-    //td : ô dữ liệu
-    //i : biến đếm
-    //txtValue : giá trị của ô dữ liệu
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toUpperCase();
@@ -94,9 +77,7 @@ function searchTable() {
 
 //hàm thực hiện hight light text tìm kiếm
 function highlightSearchText(row, filter) {
-    //row : hàng dữ liệu
-    //cells : ô dữ liệu
-    //filter : giá trị nhập vào
+    
     var cells = row.getElementsByTagName("td");
     for (var i = 0; i < cells.length; i++) {
         var cellText = cells[i].textContent || cells[i].innerText;

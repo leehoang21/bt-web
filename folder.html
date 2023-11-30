@@ -1,95 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="folder.css">
-    <script src="folder.js" type="text/javascript"></script>
-</head>
-<body>
-    <header>
-        <div class="banner">
-            <h1>Họ tên sinh viên</h1>
-            <h2>Mã sinh viên</h2>
-            <img class="avatar" src="images/avatar.jpg" width="100">
-        </div>
-        <nav>
-            <ul>
-                <li class="dropdown">
-                    <a href="#">Bài tập 2</a>
-                    <div class="dropdown-content">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="folder.css">
+        <script src="folder.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <header>
+            <div class="banner">
+                <h1>Họ tên sinh viên</h1>
+                <h2>Mã sinh viên</h2>
+                <img class="avatar" src="images/avatar.jpg" width="100">
+            </div>
+            <nav>
+                <ul>
+                    <li class="dropdown">
+                        <a href="#">Bài tập 2</a>
+                        <div class="dropdown-content">
 
-                       <ul><li><a href="#">1.Bài tập ví dụ mẫu trong bài giảng</a></li></ul>
-                       <ul><li><a href="information.html">2.Tạo trang giới thiệu thông tin cá nhân của từng sinh viên</a></li></ul>
-                       <ul><li><a href="score.html">3.Tạo trang bảng điểm cá nhân</a></li></ul>
-                       <ul><li><a href="#">4.Tạo trang lý lịch cá nhân</a></li></ul>
-                       <ul><li><a href="#">5. Trang tin</a></li></ul>
-                      
-                    </div>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Bài tập 3</a>
-                    <div class="dropdown-content">
-                       <ul><li><a ar>1.Bài tập ví dụ mẫu trong bài giảng</a></li></ul>
-                       <ul><li><a href="#">2.Viết trang kiểm tra thi trắc nghiệm gồm nhiều thể loại</a></li></ul>
-                       <ul><li><a href="#">3.Thiết kế form nhập liệu cho table LOP, xây dựng các đoạn JS kiểm tra dữ
-                        liệu đầu vào của form này.</a></li></ul>
-                       <ul><li><a href="#">4.Thiết kế form nhập liệu cho table HOSO, xây dựng các đoạn JS kiểm tra dữ
-                        liệu đầu vào của form này.</a></li></ul>
-                       <ul><li><a href="#">5.Form nhập</a></li></ul>
-                       <ul><li><a href="example.html">6.Danh sách</a></li></ul>
-                       <ul><li><a href="menu.html">7.Thực đơn</a></li></ul>
-                       <ul><li><a href="tab.html">8.Tab</a></li></ul>
-                       <ul><li><a href="folder.html">9.Cây</a></li></ul>
-                       <ul><li><a href="calculator.html">10.Máy tính</a></li></ul>
-                       <ul><li><a href="animated.html">11.Hoạt cảnh</a></li></ul>
-                       <ul><li><a href="table.html">12.Sắp xếp và tìm kiếm trên bảng</a></li></ul>
-                      
-                    </div>
-                </li>
-                
-            </ul>
-        </nav>
-    </header>
+                            <ul><li><a href="#">1.Bài tập ví dụ mẫu trong bài
+                                        giảng</a></li></ul>
+                            <ul><li><a href="information.html">2.Tạo trang giới
+                                        thiệu thông tin cá nhân của từng sinh
+                                        viên</a></li></ul>
+                            <ul><li><a href="score.html">3.Tạo trang bảng điểm
+                                        cá nhân</a></li></ul>
+                            <ul><li><a href="#">4.Tạo trang lý lịch cá nhân</a></li></ul>
+                            <ul><li><a href="#">5. Trang tin</a></li></ul>
 
-    <main class="folderTab">
-        <ul class="folder">
-            <li>
-                <button  onclick="toggleFolder(this)">+</button> 
-                <img src="images/folder-icon.png" alt="Folder Icon">
-                <label for="Main Folder">Main Folder</label>
-                <ul >
-                    <li >
-                        <button onclick="toggleFolder(this)">+</button> 
-                        <img src="images/folder-icon.png" alt="Folder Icon">
-                        <label for="Subfolder">Subfolder</label>
-                         
-                        <ul >
-                            <li>
-                                <button onclick="toggleFolder(this)">+</button> 
-                                <img src="images/folder-icon.png" alt="Folder Icon">
-                                <label for="Subfolder1">Subfolder1</label>
-                            </li>
-                            <li>
-                                <button onclick="toggleFolder(this)">+</button> 
-                                <img src="images/folder-icon.png" alt="Folder Icon">
-                                <label for="Subfolder2">Subfolder2</label>
-                            </li>
-                        </ul>
+                        </div>
                     </li>
-                   
+                    <li class="dropdown">
+                        <a href="#">Bài tập 3</a>
+                        <div class="dropdown-content">
+                            <ul><li><a ar>1.Bài tập ví dụ mẫu trong bài giảng</a></li></ul>
+                            <ul><li><a href="#">2.Viết trang kiểm tra thi trắc
+                                        nghiệm gồm nhiều thể loại</a></li></ul>
+                            <ul><li><a href="#">3.Thiết kế form nhập liệu cho
+                                        table LOP, xây dựng các đoạn JS kiểm tra
+                                        dữ
+                                        liệu đầu vào của form này.</a></li></ul>
+                            <ul><li><a href="#">4.Thiết kế form nhập liệu cho
+                                        table HOSO, xây dựng các đoạn JS kiểm
+                                        tra dữ
+                                        liệu đầu vào của form này.</a></li></ul>
+                            <ul><li><a href="#">5.Form nhập</a></li></ul>
+                            <ul><li><a href="example.html">6.Danh sách</a></li></ul>
+                            <ul><li><a href="menu.html">7.Thực đơn</a></li></ul>
+                            <ul><li><a href="tab.html">8.Tab</a></li></ul>
+                            <ul><li><a href="folder.html">9.Cây</a></li></ul>
+                            <ul><li><a href="calculator.html">10.Máy tính</a></li></ul>
+                            <ul><li><a href="animated.html">11.Hoạt cảnh</a></li></ul>
+                            <ul><li><a href="table.html">12.Sắp xếp và tìm kiếm
+                                        trên bảng</a></li></ul>
+
+                        </div>
+                    </li>
+
                 </ul>
-            </li>
-            
-        </ul>
-        
-    </main>
- 
+            </nav>
+        </header>
 
-    <footer>
-        <p>&copy; Tất cả quyền được bảo lưu.</p>
-    </footer>
+        <main class="main">
+            <ul class="folder">
+                <li>
+                    <button onclick="toggleFolder(this)">+</button>
+                    <img src="images/folder-icon.png" alt="Folder Icon">
+                    <label for="Main Folder">Main Folder</label>
+                    <ul>
+                        <li>
+                            <button onclick="toggleFolder(this)">+</button>
+                            <img src="images/folder-icon.png" alt="Folder Icon">
+                            <label for="Subfolder">Subfolder</label>
 
-</body>
+                            <ul>
+                                <li>
+                                    <button onclick="toggleFolder(this)">+</button>
+                                    <img src="images/folder-icon.png"
+                                        alt="Folder Icon">
+                                    <label for="Subfolder1">Subfolder1</label>
+                                </li>
+                                <li>
+                                    <button onclick="toggleFolder(this)">+</button>
+                                    <img src="images/folder-icon.png"
+                                        alt="Folder Icon">
+                                    <label for="Subfolder2">Subfolder2</label>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+
+        </main>
+
+        <footer>
+            <p>&copy; Tất cả quyền được bảo lưu.</p>
+        </footer>
+
+    </body>
 </html>

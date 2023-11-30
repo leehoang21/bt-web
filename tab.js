@@ -1,9 +1,13 @@
+
 function focusMe(button) {
-    var elem = document.getElementsByClassName("button-selected")[0];      
-    // if element having class `"button-selected"` defined, do stuff
-    if (elem) {
-      elem.className = "";
-    }
-    document.getElementById('txt').innerHTML=button.innerHTML;
-                  button.className = "button-selected";
+  //lấy element có class là `"button-selected"` đầu tiên
+  var elem = document.getElementsByClassName("button-selected")[0];
+  //nếu có thì xóa class
+  if (elem) {
+    elem.className = "";
   }
+  //thêm code html vào phần nội dung
+  document.getElementById('txt').innerHTML = button.innerHTML;
+  //thay dổi tên class để thay đổi màu sắc
+  button.className = "button-selected";
+}

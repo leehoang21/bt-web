@@ -1,59 +1,53 @@
-.score body {
-    margin: 0;
-    font-family:  "Roboto";
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding-top: 2em;
-}
 
-.score h5{
-    text-align: left;
-}
 
-.score table {
+.main table {
     border-collapse: collapse;
     text-align: left;
+    width: 100%;
     background-color: rgb(255, 255, 255);
 }
 
-/* phần thông tin sinh viên */
-.score caption {
-    padding-bottom: 5px;
-}
-/* phần tiêu đề của bảng */
-.score thead,
 
-.score tfoot {
+/* phần tiêu đề của bảng */
+.main thead,
+
+.main tfoot {
     background-color: #cce;
     font-size: 18px;
 }
 /* style dòng và cột của bảng */
-.score td,
-.score th {
+.main td,
+.main th {
     padding: 5px;
     border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 /* style dòng lẻ của bảng */
-.score .darker {
+.main .darker {
     background-color: rgb(230 232 232);
 }
 
-.score .left-column {
+/* phần thông tin sinh viên */
+.main caption {
+    padding-bottom: 5px;
+}
+
+.main .left-column {
     width: 50%;
     height: 30%;
     float: left;
 }
 
-.score .right-column {
+.main .right-column {
     width: 50%;
     height: 30%;
     float: right;
-   
 }
 
-.score .right-column h5{
+.main h5{
+    text-align: left;
+}
+
+.main .right-column h5{
     text-align: right;
 }

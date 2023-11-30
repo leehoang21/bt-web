@@ -1,4 +1,4 @@
-.menuTab #menu {
+.main #menu {
   width: 400px;
   height: 200px;
   background-color: #8a8aee;
@@ -6,7 +6,7 @@
   font-size: 10px;
 }
 
-.menuTab span {
+.main span {
   display: inline-block;
   color: #3f3fa1;
   width: 20px;
@@ -16,33 +16,31 @@
 }
 
 /*Khi người dùng đưa chuột đến thực đơn nào thì thực đơn đó sáng lên.*/
-.menuTab #menu ul button:hover {
+.main #menu ul button:hover {
   color: #FFF;
   background-color: #81B101;
 
 }
 
-
-
 /* -	Khi người dùng kích chọn thực đơn nào thì thực đơn đó đổi màu xanh,
  tiêu đề của thực đơn được chọn được hiển thị ở bên phải */
- .menuTab .button-selected {
+ .main .button-selected {
   background-color: #81B101;
 }
 
 /* chia cột */
-.menuTab .left-column {
+.main .left-column {
   width: 50%;
   float: left;
 
 }
 
-.menuTab .right-column {
+.main .right-column {
   width: 50%;
   float: right;
 }
 
-.menuTab #txt {
+.main #txt {
   background-color: #3f3fa1;
   width: inherit;
   height: 500px;

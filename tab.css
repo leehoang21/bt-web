@@ -1,4 +1,4 @@
-.tabTab #menu {
+.main #menu {
   width: 400px;
   height: 80px;
 
@@ -7,34 +7,26 @@
 }
 
 
-.tabTab #menu ul li {
+.main #menu ul li {
   list-style-type: none;
   display: inline;
 
 }
 
 
-.tabTab #menu ul button:hover {
+.main #menu ul button:hover {
   color: #FFF;
   background-color: #81B101;
 
 }
 
-.tabTab span {
-  display: inline-block;
-  color: #3f3fa1;
-  width: 20px;
-  height: 20px;
 
-  font-size: small;
-}
-
-.tabTab .button-selected {
+.main .button-selected {
   background-color: #81B101;
 }
 
 /* nột dung tab */
-.tabTab #txt {
+.main #txt {
   background-color: #3f3fa1;
   width: inherit;
   height: 500px;

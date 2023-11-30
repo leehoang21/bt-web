@@ -1,37 +1,22 @@
-.tableTab .table {
-    width: 80%;
-    border-collapse: collapse;
-    margin: 20px auto;
-}
-
-.tableTab th, td {
+.main th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.tableTab th {
+.main th {
     background-color: #f2f2f2;
 }
 
-.tableTab th.title{
+.main th.title{
+    /* hiển thị hình bàn tay khi di chuột đến phần có thể tiêu đề có thể sắp xếp */
     cursor: pointer;
 }
 
-.tableTab input {
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.tableTab .highlight {
-    background-color: yellow;
-}
-
-
-.tableTab th.sorted-asc::after {
+.main th.sorted-asc::after {
     content: '\2191'; /* Mũi tên lên */
 }
 
-.tableTab th.sorted-desc::after {
+.main th.sorted-desc::after {
     content: '\2193'; /* Mũi tên xuống */
 }
